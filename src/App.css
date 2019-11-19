@@ -1,0 +1,33 @@
+#loginContainer{
+  height: 80vh;
+  /* border: 1px solid #eee; */
+  margin-top: 10vh;
+}
+
+#loginContainer>.row{
+  height: 100%;
+}
+
+#loginContainer form{
+  width: 90%;
+  margin: 0 auto;
+}
+
+#loginContainer form h2{
+  text-align: center;
+}
+
+.formCol {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#loginContainer .d-sm-block{
+  /* background-image: url('https://images.unsplash.com/photo-1546085588-19daae6c2ffb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80'); */
+  /* background-image: url('https://images.unsplash.com/photo-1551357141-9223c3be5d2e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'); */
+  background-image: url('https://images.unsplash.com/photo-1551357275-408e54682a7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80');
+  background-size: cover;
+  background-position: bottom center;
+}
