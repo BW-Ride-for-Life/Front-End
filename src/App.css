@@ -13,7 +13,11 @@
   margin: 0 auto;
 }
 
-#loginContainer form h2{
+#loginContainer form input{
+  border-radius: 0;
+}
+
+#loginContainer form h3{
   text-align: center;
 }
 

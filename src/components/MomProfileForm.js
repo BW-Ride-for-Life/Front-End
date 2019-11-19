@@ -3,8 +3,12 @@ import {Link} from 'react-router-dom';
 import {withFormik, Form, Field} from 'formik';
 import * as Yup from 'yup'
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faMobile, faEnvelope, faMapMarkedAlt, faCalendarAlt, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
+import {Button, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap'
 
-import {Col, FormGroup, Label, Button, InputGroup, InputGroupAddon, InputGroupText, Input} from 'reactstrap'
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const isLoggedIn = false;
 
@@ -18,6 +22,12 @@ const OptionContainer = styled.div`
 
 const ProfileForm = ({values, errors, touched, status}) => {
     const [formData, setFormData] = useState({});
+
+    const [driverDate, setDriverDate] = useState(new Date());
+
+    function changeDate(today) {
+        setDriverDate(today)
+    }
 
     useEffect(() => {
         // api call for user data
@@ -45,110 +55,64 @@ const ProfileForm = ({values, errors, touched, status}) => {
     return (
         <>
             <Form>
-                <h3>Sign Up with Ride for Life</h3>
+                <h3 className="mb-4">Sign Up with Ride for Life</h3>
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>N</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faUser} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="user_name" id="user_name" placeholder="Name" />
-                    {touched.user_name && errors.user_name ? (<small>{errors.user_name}</small>) : null}
+                    <Field name="user_name" id="user_name" placeholder="Name" className="form-control" />
+                    {touched.user_name && errors.user_name ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.user_name}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>P</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faMobile} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="user_phone_number" id="user_phone_number" placeholder="Phone Number" onChange="" />
-                    {touched.user_phone_number && errors.user_phone_number ? (<small>{errors.user_phone_number}</small>) : null}
+                    <Field type="text" name="user_phone_number" id="user_phone_number" placeholder="Phone Number" className="form-control" />
+                    {touched.user_phone_number && errors.user_phone_number ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.user_phone_number}</small>) : null}
                 </InputGroup>
                 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>E</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faEnvelope} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="email" placeholder="Email Address" />
-                    {touched.user_email && errors.user_email ? (<small className="form-text text-danger">{errors.user_email}</small>) : null}
-                </InputGroup>
-
-                {/* <FormGroup row>
-                    <Label htmlFor="user_email" sm={3}>Email</Label>
-                    <Col sm={9}>
-                        <Field type="text" name="user_email" id="user_email" className="form-control" />
-                        {touched.user_email && errors.user_email ? (<small className="form-text text-danger">{errors.user_email}</small>) : null}
-                    </Col>
-                </FormGroup> */}
-
-                {/* <InputGroup size="" className="mb-4">
-                    <InputGroupAddon addonType="prepend">
-                        <InputGroupText>A</InputGroupText>
-                    </InputGroupAddon>
-                    <Input name="user_address" id="user_address" placeholder="Address" />
-                    {touched.user_address && errors.user_address ? (<small>{errors.user_address}</small>) : null}
-                </InputGroup> */}
-
-                <InputGroup size="" className="mb-4">
-                    <InputGroupAddon addonType="prepend">
-                        <InputGroupText>PL</InputGroupText>
-                    </InputGroupAddon>
-                    <Input name="user_plot" id="user_plot" placeholder="Plot" />
-                    {touched.user_plot && errors.user_plot ? (<small>{errors.user_plot}</small>) : null}
+                    <Field name="email" placeholder="Email Address" className="form-control" />
+                    {touched.user_email && errors.user_email ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.user_email}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>P</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faMapMarkedAlt} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="password" id="user_password" placeholder="Password" />
-                    {touched.password && errors.password ? (<small>{errors.password}</small>) : null}
+                    <Field name="user_plot" id="user_plot" placeholder="Address" className="form-control" />
+                    {touched.user_plot && errors.user_plot ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.user_plot}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>P</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faLock} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="password2" id="user_password2" placeholder="Confirm Password" />
-                    {touched.password2 && errors.password2 ? (<small>{errors.password2}</small>) : null}
+                    <Field name="password" id="user_password" placeholder="Password" className="form-control" />
+                    {touched.password && errors.password ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.password}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText>D</InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faUnlock} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="due_date" id="due_date" placeholder="Due Date" />
-                    {touched.due_date && errors.due_date ? (<small>{errors.due_date}</small>) : null}
+                    <Field name="password2" id="user_password2" placeholder="Confirm Password" className="form-control" />
+                    {touched.password2 && errors.password2 ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.password2}</small>) : null}
                 </InputGroup>
 
-                {/* <FormGroup row>
-                    <Label htmlFor="user_plot" sm={3}>Address</Label>
-                    <Col sm={9}>
-                        <Field type="text" name="user_plot" id="user_plot" className="form-control" />
-                        {touched.user_plot && errors.user_plot ? (<small className="form-text text-danger">{errors.user_plot}</small>) : null}
-                    </Col>
-                </FormGroup> */}
+                <InputGroup size="" className="mb-4">
+                    <InputGroupAddon addonType="prepend">
+                        <InputGroupText><FontAwesomeIcon icon={faCalendarAlt} /></InputGroupText>
+                    </InputGroupAddon>
+                    <DatePicker selected={driverDate} onChange={changeDate} className="form-control" />
+                    {/* <Field name="due_date" id="due_date" placeholder="Due Date" className="form-control" /> */}
+                    {touched.due_date && errors.due_date ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.due_date}</small>) : null}
+                </InputGroup>
 
-                {/* <FormGroup row>
-                    <Label htmlFor="user_password" sm={3}>Password</Label>
-                    <Col sm={9}>
-                        <Field type="password" name="password" id="user_password" className="form-control" />
-                        {touched.password && errors.password ? (<small className="form-text text-danger">{errors.password}</small>) : null}
-                    </Col>
-                </FormGroup> */}
-
-                {/* <FormGroup row>
-                    <Label htmlFor="user_password2" sm={3}>Password</Label>
-                    <Col sm={9}>
-                        <Field type="password" name="password2" id="user_password2" className="form-control" />
-                        {touched.password2 && errors.password2 ? (<small className="form-text text-danger">{errors.password2}</small>) : null}
-                    </Col>
-                </FormGroup> */}
-
-                {/* <FormGroup row>
-                    <Label htmlFor="due_date" sm={3}>Due Date</Label>
-                    <Col sm={9}>
-                        <Field type="text" name="due_date" id="due_date" className="form-control" />
-                        {touched.due_date && errors.due_date ? (<small className="form-text text-danger">{errors.due_date}</small>) : null}
-                    </Col>
-                </FormGroup> */}
                 <Field type="hidden" name="user_id" id="user_id" />
 
                 <div>
@@ -184,7 +148,7 @@ const MomProfileForm = withFormik({
         password: Yup.string().required(),
         password2: Yup.string().required().test('passwords-match', 'Passwords must match ya fool', function(value) {
             return this.parent.password === value;
-          })
+        })
     }),
     handleSubmit(values, {resetForm, setStatus}) {
         setStatus(values);

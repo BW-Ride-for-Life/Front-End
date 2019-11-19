@@ -4,7 +4,7 @@ import {Container, Row, Col} from 'reactstrap';
 
 import LoginForm from './LoginForm';
 import NewMotherForm from './MomProfileForm';
-import NewDriverForm from './DriverReviewForm';
+import NewDriverForm from './DriverProfileForm';
 
 import styled from 'styled-components';
 
@@ -19,7 +19,7 @@ const LoginPage = () => {
         <Container id="loginContainer" className="shadow">
             <Row>
                 <Col className="d-none d-sm-block"></Col>
-                <Col className="formCol" xs="12" sm="5">
+                <Col className="formCol" xs="12" sm="7" md="5" >
                     <Route exact path="/Login" component={LoginForm} />
                     
                     <Route path="/NewMother" component={NewMotherForm} />

@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import {Container, Row, Col, Button, FormGroup, Label, InputGroup, InputGroupAddon, InputGroupText, Input} from 'reactstrap'
+import {Button, InputGroup, InputGroupAddon, InputGroupText, Input} from 'reactstrap'
 import {withFormik, Form, Field} from 'formik'
 import * as Yup from 'yup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 const OptionContainer = styled.div`
@@ -25,21 +27,21 @@ const LoginForm = ({values, errors, touched, status}) => {
     return (
         <>
             <Form>
-                <h2>Sign In to Ride for Life</h2>
+                <h3 className="mb-4">Sign In to Ride for Life</h3>
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText><span className="oi oi-envelope-closed"></span></InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faEnvelope} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="email" placeholder="Email Address" />
-                    {touched.email && errors.email ? (<small className="form-text text-danger">{errors.email}</small>) : null}
+                    <Field name="email" placeholder="Email Address" className="form-control" />
+                    {touched.email && errors.email ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.email}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
-                        <InputGroupText><span className="oi oi-envelope-closed"></span></InputGroupText>
+                        <InputGroupText><FontAwesomeIcon icon={faLock} /></InputGroupText>
                     </InputGroupAddon>
-                    <Input name="password" placeholder="Password" />
-                    {touched.password && errors.password ? (<small className="form-text text-danger">{errors.password}</small>) : null}
+                    <Field name="password" placeholder="Password" className="form-control" />
+                    {touched.password && errors.password ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.password}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
@@ -82,6 +84,7 @@ const FormikLogin = withFormik({
       resetForm();
       setStatus(values);
   
+      console.log(values)
       //I don't need the if statements here, as it seems Formik will not execute handleSubmit until
       //touched is true and there are no errors
       
