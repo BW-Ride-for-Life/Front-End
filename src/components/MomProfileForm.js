@@ -2,7 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {withFormik, Form, Field} from 'formik';
 import * as Yup from 'yup'
 
-import {Container, Row, Col, FormGroup, Label} from 'reactstrap'
+import {Col, FormGroup, Label} from 'reactstrap'
+
+const isLoggedIn = false;
 
 const ProfileForm = ({values, errors, touched, status}) => {
     const [formData, setFormData] = useState({});
@@ -11,6 +13,23 @@ const ProfileForm = ({values, errors, touched, status}) => {
         // api call for user data
         status && setFormData(status)
     }, [status])
+
+    const showMeTheButtons = (isLoggedIn) => {
+        if (isLoggedIn) {
+            return (
+                <>                    
+                    <button type="submit" className="btn btn-primary">Update</button>
+                    <button type="reset" className="btn btn-danger">Delete</button>
+                </>
+            )
+        }else{
+            return (
+                <>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </>
+            )
+        }
+    } 
 
     return (
         <>
@@ -56,6 +75,14 @@ const ProfileForm = ({values, errors, touched, status}) => {
                 </FormGroup>
 
                 <FormGroup row>
+                    <Label htmlFor="user_password2" sm={3}>Password</Label>
+                    <Col sm={9}>
+                        <Field type="password" name="password2" id="user_password2" className="form-control" />
+                        {touched.password2 && errors.password2 ? (<small className="form-text text-danger">{errors.password2}</small>) : null}
+                    </Col>
+                </FormGroup>
+
+                <FormGroup row>
                     <Label htmlFor="due_date" sm={3}>Due Date</Label>
                     <Col sm={9}>
                         <Field type="text" name="due_date" id="due_date" className="form-control" />
@@ -63,7 +90,9 @@ const ProfileForm = ({values, errors, touched, status}) => {
                     </Col>
                 </FormGroup>
                 <Field type="hidden" name="user_id" id="user_id" />
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div>
+                    {showMeTheButtons(isLoggedIn)}
+                </div>
                 
             </Form>
             <p>{`Email Address : ${formData.user_email}`}</p>
@@ -80,6 +109,7 @@ const MomProfileForm = withFormik({
             user_phone_number: values.user_phone_number || "",
             user_plot: values.user_plot || "",
             password: values.password || "",
+            password2: values.password2 || "",
             due_date: values.due_date || ""
         }
     },
@@ -88,7 +118,10 @@ const MomProfileForm = withFormik({
         user_email: Yup.string().required('You\'ll use your email address as your login.').email('Check you email address'),
         user_phone_number: Yup.string().required('Please enter a valid phone number'),
         user_plot: Yup.number(),
-        password: Yup.string().required()
+        password: Yup.string().required(),
+        password2: Yup.string().required().test('passwords-match', 'Passwords must match ya fool', function(value) {
+            return this.parent.password === value;
+          })
     }),
     handleSubmit(values, {resetForm, setStatus}) {
         setStatus(values);
