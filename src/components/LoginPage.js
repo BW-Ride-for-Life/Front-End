@@ -1,61 +1,30 @@
 import React from 'react';
-import {Container, Row, Col, Button, FormGroup, Label, InputGroup, InputGroupAddon, InputGroupText, Input} from 'reactstrap'
-import {withFormik, Form, Field} from 'formik'
-import * as Yup from 'yup';
-import styled from 'styled-components';
+import { Route } from 'react-router-dom';
+import {Container, Row, Col} from 'reactstrap';
 
-const OptionContainer = styled.div`
-    width: 100%;
-    font-size: 12px;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 6px;
-`
+import LoginForm from './LoginForm';
+import NewMotherForm from './MomProfileForm';
+import NewDriverForm from './DriverReviewForm';
+
+import styled from 'styled-components';
 
 const Copyright = styled.div`
     text-align: center;
     font-size: 11px;
 `
 
-const LoginForm = ({values, errors, touched, status}) => {
+const LoginPage = () => {
 
     return (
         <Container id="loginContainer" className="shadow">
             <Row>
                 <Col className="d-none d-sm-block"></Col>
                 <Col className="formCol" xs="12" sm="5">
-                    <Form>
-                        <h2>Sign In to Ride for Life</h2>
-                        <InputGroup size="" className="mb-4">
-                            <InputGroupAddon addonType="prepend">
-                                <InputGroupText><span className="oi oi-envelope-closed"></span></InputGroupText>
-                            </InputGroupAddon>
-                            <Input name="email" placeholder="Email Address" />
-                            {touched.email && errors.email ? (<small className="form-text text-danger">{errors.email}</small>) : null}
-                        </InputGroup>
+                    <Route exact path="/Login" component={LoginForm} />
+                    
+                    <Route path="/NewMother" component={NewMotherForm} />
+                    <Route path="/NewDriver" component={NewDriverForm} />
 
-                        <InputGroup size="" className="mb-4">
-                            <InputGroupAddon addonType="prepend">
-                                <InputGroupText><span className="oi oi-envelope-closed"></span></InputGroupText>
-                            </InputGroupAddon>
-                            <Input name="password" placeholder="Password" />
-                            {touched.password && errors.password ? (<small className="form-text text-danger">{errors.password}</small>) : null}
-                        </InputGroup>
-
-                        <InputGroup size="" className="mb-4">
-                            <Input name="userType" type="select">
-                                <option value="">Your Role</option>
-                                <option value="Mom">Mom</option>
-                                <option value="Driver">Driver</option>
-                            </Input>
-                        </InputGroup>
-
-                        <Button type="submit" color="primary" size="" block>Login</Button>
-                        <OptionContainer>
-                             <div>Forgot Password</div>
-                             <div>Don't have an account? Sign Up</div>
-                        </OptionContainer>
-                    </Form>
                     <Copyright>Copyright &copy; Ride for Life 2019</Copyright>
                 </Col>
             </Row>
@@ -64,34 +33,4 @@ const LoginForm = ({values, errors, touched, status}) => {
 
 }
 
-const FormikLogin = withFormik({
-  
-    mapPropsToValues({ email, password, userType }) {
-      return {
-        email: email || "",
-        password: password || "",
-        userType: userType || "",
-      };
-    },
-  
-    validationSchema: Yup.object().shape({
-      email: Yup.string().required("Please input donor's email address").email("Please enter a valid email"),
-      password: Yup.string().required("Please input a password").min(3,"Min of 3 chars for the password"),
-      userType: Yup.string().oneOf(["Mom", "Driver"],"Please choose user type").required("Please choose user type"),
-    }),
-    
-    handleSubmit(values, { setStatus, resetForm }) {
-  
-      resetForm();
-      setStatus(values);
-  
-      //I don't need the if statements here, as it seems Formik will not execute handleSubmit until
-      //touched is true and there are no errors
-      
-  
-    },
-    
-    
-  })(LoginForm);
-
-export default FormikLogin;
+export default LoginPage;
