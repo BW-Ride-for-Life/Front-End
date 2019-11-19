@@ -1,17 +1,28 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import {withFormik, Form, Field} from 'formik';
+// import DatePicker from 'react-datepicker';
+// import "react-datepicker/dist/react-datepicker.css";
+import {withFormik, Field} from 'formik';
+import {Form, Datepicker} from 'react-formik-ui';
 import * as Yup from 'yup'
-
-import {Col, FormGroup, Label} from 'reactstrap'
+import {Container, Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupText, ButtonGroup, Button} from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
 
 const isLoggedIn = false;
 
-const ReviewForm = ({values, errors, touched, status}) => {
+const ReviewForm = ({values, errors, touched, status, setFieldValue}) => {
     const [driverDate, setDriverDate] = useState(new Date());
+    const [driverRating, setDriverRating] = useState(values.driverRating);
+    const [formData, setFormData] = useState({});
+
+    console.log(values)
+
+    useEffect(() => {
+        // api call for user data
+        status && setFormData(status)
+    }, [status])
 
     function changeDate(today) {
         setDriverDate(today)
@@ -29,47 +40,39 @@ const ReviewForm = ({values, errors, touched, status}) => {
     }
 
     return (
-        <>
+        <>    
             <Form>
-                <FormGroup row>
-                    <Label htmlFor="driverDate" sm={3}>Date</Label>
-                    <Col sm={9}>
-                        {/* <Field type="text" name="driverDate" id="driverDate" className="form-control" /> */}
-                        <DatePicker selected={driverDate} onChange={changeDate} />
-                        {touched.driverDate && errors.driverDate ? (<small className="form-text text-danger">{errors.driverDate}</small>) : null}
-                    </Col>
-                </FormGroup>
-                
-                <FormGroup row>
-                    <Label htmlFor="driverRating" sm={3}>Rating</Label>
-                    <Col sm={9}>
-                        <Rater total={5} rating={0} />
-                        {/* <Field type="text" name="driverRating" id="driverRating" className="form-control" />
-                        {touched.driverRating && errors.driverRating ? (<small className="form-text text-danger">{errors.driverRating}</small>) : null} */}
-                    </Col>
+                <FormGroup>
+                    <Datepicker id="driverDate" name="driverDate" label="Review Date " className="form-control" dateFormat="MM/dd/yyyy" placeholder="Review Date" />
                 </FormGroup>
 
-                <FormGroup row>
-                    <Label htmlFor="driverReview" sm={3}>Review</Label>
-                    <Col sm={9}>
-                        <Field type="text" name="driverReview" id="driverReview" className="form-control" />
-                        {touched.driverReview && errors.driverReview ? (<small className="form-text text-danger">{errors.driverReview}</small>) : null}
-                    </Col>
+                <FormGroup>
+                    <div>Rating</div>
+                    <Rater total={5} rating={driverRating} onRate={({rating}) => {setDriverRating(rating); setFieldValue('driverRating', rating, false);}} />
                 </FormGroup>
 
-                {isLoggedIn && (<button type="submit" className="btn btn-primary">Submit</button>)}
-                {(!isLoggedIn && (
-                    <>
-                        <button type="submit" className="btn btn-primary">Delete</button>
-                        <button type="submit" className="btn btn-primary">Update</button>
-                    </>
+                <FormGroup>
+                    <div>Review</div>
+                    <Field component="textarea" className="form-control" name="driverReview" id="driverReview" />
+                </FormGroup>
+
+                {!isLoggedIn && (<button type="submit" className="btn btn-primary">Submit</button>)}
+
+                {(isLoggedIn && (
+                    <ButtonGroup>
+                        <Button type="submit" color="primary">Update</Button>
+                        <Button type="button" className="btn btn-danger">Delete</Button>
+                    </ButtonGroup>
                 ))}
 
-                <Field type="hidden" name="driverDate" id="driverDate" />
                 <Field type="hidden" name="driverRating" id="driverRating" />
                 <Field type="hidden" name="driverId" id="driverId" />
                 <Field type="hidden" name="userId" id="userId" />
             </Form>
+            
+            <p>{`Review Date: ${formData.driverDate}`}</p>
+            <p>{`Review Rating: ${formData.driverRating}`}</p>
+            <p>{`Review Review: ${formData.driverReview}`}</p>
         </>
     )
 }
@@ -78,11 +81,14 @@ const DriverReviewForm = withFormik({
     mapPropsToValues: values => {
         return {
             driverDate: values.driverDate || "",
-            driverRating: values.driverRating || "",
-            driverReview: values.driverReview || ""
+            driverRating: values.driverRating || 3,
+            driverReview: values.driverReview || "",
+            userId: values.userId || "",
+            driverId: values.driverId || ""
         }
     },
     validationSchema: Yup.object().shape({
+        driverDate: Yup.date().required('Don\'t forget a date!')
 
     }),
     handleSubmit(values, {resetForm, setStatus}) {

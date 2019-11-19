@@ -10,8 +10,8 @@ function App() {
   return (
     <div className="App">
       {/* <ProfileForm /> */}
-      {/* <ReviewForm /> */}
-      <LoginPage />
+      <ReviewForm />
+      {/* <LoginPage /> */}
     </div>
   );
 }
