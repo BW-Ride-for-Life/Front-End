@@ -119,6 +119,15 @@ function MomProfile(props) {
 		</span>
 	</p>
 	</RegisDiv>
+
+  <RegisDiv>
+	<p>
+		Update/Delete your driver reviews
+		<span> 
+		<StyledLink to='/reviewList' > here</StyledLink>
+		</span>
+	</p>
+	</RegisDiv>
     
 
   <ActionBtn textDisplay={"Logout"} clickHandler={clickHandlerLogout}/>

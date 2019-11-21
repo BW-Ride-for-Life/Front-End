@@ -63,12 +63,14 @@ export const ALLDRV_SAVE = "ALLDRV_SAVE";
 export const MOMVIEW_DRVPROF = "MOMVIEW_DRVPROF"; 
 export const MOMVIEW_DRVREVU = "MOMVIEW_DRVREVU"; 
 
+// For Mom Reviews Listing
+export const MOM_ALLREVU_SAVE = "MOM_ALLREVU_SAVE"; 
 
 
 const delay_time = 1500;  //This is length of artificial delay time so that we can see different states
 
-//const pathPrefix = "https://ride-for-life-back-end.herokuapp.com"; // for deployed site
-const pathPrefix = "http://localhost:5014"; // for local server for debugging purposes
+//export const pathPrefix = "https://ride-for-life-back-end.herokuapp.com"; // for deployed site
+export const pathPrefix = "http://localhost:5014"; // for local server for debugging purposes
 
 
 // ***************************************************
@@ -568,6 +570,38 @@ export function getMomViewDrvData() {
       
       
     });
+    
+
+  };
+}
+
+
+// ***************************************************
+// ***************************************************
+// For Mom Reviews Listing
+export function getAllReviews() {
+  return function(dispatch) {
+    
+    
+    const pathSuffix = "/api/users/" + sessionStorage.getItem('id') + "/reviews";
+    // console.log("In getAllReviews & pathSuffix is:",pathSuffix);
+    
+    axiosWithAuth()
+    .get(pathPrefix+pathSuffix)
+    .then(res => {
+      console.log("This is data from server in getAllReviews THEN :",res.data);
+     
+
+      dispatch({type:MOM_ALLREVU_SAVE,payload:res.data});
+    })
+    .catch(err => {
+      console.log("This is data from server, in CATCH of getDriverProfileData 1st err:",err);
+      console.log("This is data from server, in CATCH of getDriverProfileData 1st err.response:",err.response);
+      
+    });
+    
+
+    
     
 
   };

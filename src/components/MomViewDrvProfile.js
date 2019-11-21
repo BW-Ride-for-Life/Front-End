@@ -44,12 +44,12 @@ function MomViewDrvProfile(props) {
   
 	return ( <>
 
-		<h1>Driver details page. </h1>
+		<h1>{`Details for driver: ${momViewDrvProf.name}`}</h1>
     
     <ActionBtn textDisplay={"Back To Listings"} clickHandler={clickHandlerBack}/>
     
 
-    <p>{`Driver's name: ${momViewDrvProf.name}`}</p>
+    {/* <p>{`Driver's name: ${momViewDrvProf.name}`}</p> */}
     <p>{`Driver's email: ${momViewDrvProf.email}`}</p>
     <p>{`Driver's phoneNo: ${momViewDrvProf.phoneNo}`}</p>
     <p>{`Driver's plot: ${momViewDrvProf.plot}`}</p>

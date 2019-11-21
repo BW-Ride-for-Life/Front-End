@@ -32,6 +32,9 @@ import {
   // For Mom View of Driver Information
   MOMVIEW_DRVPROF, MOMVIEW_DRVREVU,
 
+  // For Mom Reviews Listing
+  MOM_ALLREVU_SAVE,
+
 } from '../actions';
 
 
@@ -86,6 +89,9 @@ const initialState = {
   // For Mom View of Driver Information
   momViewDrvProf:{}, 
   momViewDrvRev:[],
+
+  // For Mom Reviews Listing
+  allRevuData: [],
 };
 
 
@@ -502,7 +508,23 @@ case MOMVIEW_DRVREVU: {
 //************************************************ */
 
 
+/************************************************ */
+//*** Begin Mom View of All Her Reviews ********* */
 
+case MOM_ALLREVU_SAVE: {
+  const newState = {
+    ...state,
+    allRevuData:action.payload,
+  } 
+  return newState;
+}
+
+
+
+
+
+//****** End Mom View of All Her Reviews ********* */
+//************************************************ */
 
 
 
