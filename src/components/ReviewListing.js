@@ -6,7 +6,7 @@ import ActionBtn from './ActionBtn';
 import ReviewListingCard from './ReviewListingCard';
 
 // *@* redux actions
-import {getAllReviews} from '../actions';
+import {getAllReviews,delay_time} from '../actions';
 
 
 const MyH1Chr = styled.h1`
@@ -35,19 +35,37 @@ function ReviewListing(props) {
   } = props;
 
   const [momName,setMomName] = useState("");
+  const [updateMsg,setUpdateMsg] = useState("");
   
-
   useEffect(() => {
-    getAllReviews();
     const fromSess = JSON.parse(sessionStorage.getItem('momInfo'));
     setMomName(fromSess.name);
   }, []);
+
+
+  useEffect(() => {
+    if(updateMsg==="") {
+      getAllReviews();
+    }  
+
+    if(updateMsg!=="") {
+      setTimeout(()=>{
+        setUpdateMsg("");
+      },delay_time)
+    }  
+
+  }, [updateMsg]);
 
   //This is to go back to mom profile
   function clickHandlerBack(e) {
     history.push('/profMom');
   }
 
+  //This is just used to trigger a redraw of this
+  //page after a review is deleted with updating message
+  function redrawReviewListing () {
+    setUpdateMsg("Updating...");
+  }
   
   
   return (
@@ -56,6 +74,8 @@ function ReviewListing(props) {
       <MyH1Chr>{`All reviews for mom: ${momName}`}</MyH1Chr>
 
       <ActionBtn textDisplay={"Back To Profile"} clickHandler={clickHandlerBack}/>
+
+      <p>{updateMsg}</p>
       
       {/* {console.log("In DriversListing & alldrvData:",alldrvData)} */}
 
@@ -67,6 +87,8 @@ function ReviewListing(props) {
           <ReviewListingCard key={elem.id}
           data={elem}
           history={history}
+          redrawReviewListing={redrawReviewListing}
+
           />
         )}
       </CardDivChrList>

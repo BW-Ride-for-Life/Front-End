@@ -29,7 +29,7 @@ const MyDivCharCrd =  styled.div`
 
 
 export default function ReviewListingCard(props) {
-  // console.log("In ReviewListingCard & props:",props);
+  console.log("In ReviewListingCard & props:",props);
   const {driver_id,id,rating,review_date,review_text,user_id,reviewer} = props.data;
 
   const [drvName,setDrvName] = useState("");
@@ -78,8 +78,21 @@ export default function ReviewListingCard(props) {
 
   function deleteHandler() {
     console.log("Update button clicked in ReviewListingCard page");
-    // sessionStorage.setItem("driverCardId", id);
-    // props.history.push('/reviewList');
+
+    axiosWithAuth()
+    .delete(pathPrefix+"/api/reviews/"+id)
+    .then(res => {
+      // console.log("This is data from server in deleteHandler in ReviewListingCard THEN :",res.data);
+           
+    })
+    .catch(err => {
+      console.log("This is data from server, in CATCH of deleteHandler in ReviewListingCard, err:",err);
+      console.log("This is data from server, in CATCH of deleteHandler in ReviewListingCard, err.response:",err.response);
+      
+    });
+
+    props.redrawReviewListing();
+    
   }
 
 
