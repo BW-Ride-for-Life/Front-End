@@ -26,6 +26,9 @@ import {
   //For mom update page
   MOM_UPDT_START, MOM_UPDT_SUCC, MOM_UPDT_FAIL, MOM_UPDT_MOVE, MOM_UPDT_CLR_MOVE, MOM_UPDT_CLR_MOM_INFO,
 
+  //For drivers listing page
+  ALLDRV_SAVE,
+
 } from '../actions';
 
 
@@ -73,6 +76,9 @@ const initialState = {
   momUpdtState: 0, //0=no action taken, 1=action ongoing, 2=successful, 3=failure
   momUpdtErrMsg:"",
   momUpdtMove: false,
+
+  //For drivers listing page
+  alldrvData:[],
 
 };
 
@@ -448,7 +454,21 @@ case MOM_UPDT_CLR_MOM_INFO: {
 //************************************************ */
 
 
+//************************************************ */
+//****** Begin For Drivers Listing   ************* */
 
+case ALLDRV_SAVE: {
+  const newState = {
+    ...state,
+    alldrvData:action.payload,
+  } 
+  return newState;
+}
+
+
+
+//******* End For Drivers Listing **************** */
+//************************************************ */
 
 
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+// import { Link } from 'react-router-dom';
 import { Form, withFormik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
@@ -9,8 +9,8 @@ import mailIcon from '../images/mail.png';
 import userIcon from '../images/user.png';
 import locationIcon from '../images/compass.png';
 import phoneIcon from '../images/phoneHeadset.png';
-import cashIcon from '../images/cash.png';
-import lockIcon from '../images/lock.png';
+// import cashIcon from '../images/cash.png';
+// import lockIcon from '../images/lock.png';
 
 import TextIn from './TextIn';
 import SubmitBtn from './SubmitBtn';
@@ -33,17 +33,17 @@ const FormCtrDiv = styled.div`
   justify-content: center;
 `;
 
-const ButtonDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
+// const ButtonDiv = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const SpaceDiv = styled.div`
-  width:10px;
-  height:20px;
-`;
+// const SpaceDiv = styled.div`
+//   width:10px;
+//   height:20px;
+// `;
 
 const StyledH3 = styled.h3`
   width:fit-content;
@@ -55,7 +55,7 @@ const StyledH3 = styled.h3`
 const MomUpdate = (props) => {
   const {
     //Formik bindings
-    errors, touched, status, setFieldValue,
+    errors, touched, setFieldValue,
     //Redux state bindings
     momUpdtState, momUpdtErrMsg, momUpdtMove, momInfo,
     //Redux action bindings
@@ -65,13 +65,13 @@ const MomUpdate = (props) => {
   } = props;
 
   // For debugging use only
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   
 
   //Saves data into local state for debugging use only
-  useEffect(() => {
-    status && setData(status);
-  }, [status]);
+  // useEffect(() => {
+  //   status && setData(status);
+  // }, [status]);
 
   useEffect(() => {
     //When comming from the Mom profile page. Preload form data from 

@@ -113,9 +113,9 @@ function MomProfile(props) {
 
   <RegisDiv>
 	<p>
-		Update mom information 
+		Go to Driver Listings 
 		<span> 
-		<StyledLink to='/updateMom' > here</StyledLink>
+		<StyledLink to='/drvList' > here</StyledLink>
 		</span>
 	</p>
 	</RegisDiv>

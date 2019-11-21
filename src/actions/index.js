@@ -56,6 +56,9 @@ export const MOM_UPDT_MOVE = "MOM_UPDT_MOVE";
 export const MOM_UPDT_CLR_MOVE = "MOM_UPDT_CLR_MOVE";
 export const MOM_UPDT_CLR_MOM_INFO = "MOM_UPDT_CLR_MOM_INFO";
 
+//For drivers listing page
+export const ALLDRV_SAVE = "ALLDRV_SAVE"; 
+
 
 
 const delay_time = 1500;  //This is length of artificial delay time so that we can see different states
@@ -476,6 +479,36 @@ export function deleteMom() {
     .catch(err => {
       console.log("This is data from server, in CATCH of deleteMom err:",err);
       console.log("This is data from server, in CATCH of deleteMom err.response:",err.response);
+      
+      
+    });
+    
+
+  };
+}
+
+
+// ***************************************************
+// ***************************************************
+// For Drivers Listing page
+export function getAllDrivers() {
+  return function(dispatch) {
+    
+    const pathSuffix = "/api/drivers/";
+
+    
+
+    axiosWithAuth()
+    .get(pathPrefix+pathSuffix)
+    .then(res => {
+      console.log("This is data from server in getAllDrivers THEN :",res.data);
+      
+      dispatch({type:ALLDRV_SAVE,payload:res.data});
+
+    })
+    .catch(err => {
+      console.log("This is data from server, in CATCH of getAllDrivers err:",err);
+      console.log("This is data from server, in CATCH of getAllDrivers err.response:",err.response);
       
       
     });

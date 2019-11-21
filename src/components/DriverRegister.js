@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { Form, withFormik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
@@ -14,7 +13,6 @@ import lockIcon from '../images/lock.png';
 
 import TextIn from './TextIn';
 import SubmitBtn from './SubmitBtn';
-import ActionBtn from './ActionBtn';
 
 // *@* redux actions
 import {driverReg, clear_drvRegMovePage} from '../actions';
@@ -33,17 +31,6 @@ const FormCtrDiv = styled.div`
   justify-content: center;
 `;
 
-const ButtonDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const SpaceDiv = styled.div`
-  width:10px;
-  height:20px;
-`;
 
 const StyledH3 = styled.h3`
   width:fit-content;
@@ -55,7 +42,7 @@ const StyledH3 = styled.h3`
 const DriverRegister = (props) => {
   const {
     //Formik bindings
-    errors, touched, status,
+    errors, touched, //status,
     //Redux state bindings
     drvRegState, drvRegErrMsg, drvRegMove,
     //Redux action bindings
@@ -65,13 +52,13 @@ const DriverRegister = (props) => {
   } = props;
 
   // For debugging use only
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   
 
   //Saves data into local state for debugging use only
-  useEffect(() => {
-    status && setData(status);
-  }, [status]);
+  // useEffect(() => {
+  //   status && setData(status);
+  // }, [status]);
 
 
   useEffect(() => {
