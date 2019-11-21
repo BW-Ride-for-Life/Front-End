@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
+import DriverReviewModal from './modals/DriverReviewModal';
+
 import {Container, Row, Col, Button, ListGroup, ListGroupItem, Table, ButtonGroup, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import classnames from 'classnames';
 
@@ -116,23 +118,25 @@ toast.configure({
 });
 
 const DriverProfile = (props) => {
-    //console.dir(props.driver)
     const [newDriver, setNewDriver] = useState(props.driver);
-    const [driverProfile, setDriverProfile] = useState({});
+    const [driverProfile, setDriverProfile] = useState((props.driver) ? props.driver : fakeUser);
     //const [driverProfile, setDriverProfile] = useState({fakeUser});
+    const [reviewList, setReviewList] = useState(fakeReviews);
 
     useEffect(() => {
-        const newDriverProfile = {
-            "id": 4,
-            "drivers_name": props.driver.name,
-            "drivers_plot": props.driver.height,
-            "drivers_phone_number": props.driver.mass,
-            "drivers_email": props.driver.skin_color,
-            "password": "$2a$11$mxRYg747sGwIGz1/TR4ocuTA7Y1okuzqp/g3sWKlDXZrpqAr/oajG",
-            "drivers_price": props.driver.mass,
-            "role": "driver"
+        if(props.driver){
+            const newDriverProfile = {
+                "id": 4,
+                "drivers_name": props.driver.name,
+                "drivers_plot": props.driver.height,
+                "drivers_phone_number": props.driver.mass,
+                "drivers_email": props.driver.skin_color,
+                "password": "$2a$11$mxRYg747sGwIGz1/TR4ocuTA7Y1okuzqp/g3sWKlDXZrpqAr/oajG",
+                "drivers_price": props.driver.mass,
+                "role": "driver"
+            }
+            setDriverProfile(newDriverProfile)
         }
-        setDriverProfile(newDriverProfile)
     }, [props])
 
     console.log(driverProfile)
@@ -155,6 +159,20 @@ const DriverProfile = (props) => {
                 setDriverProfile(updateProfile)
             })
             .catch(err => console.log(`Error: ${err.response}`));
+    }
+
+    function addNewReview(review){
+        // Adds a new review for a driver
+        const newReview = {
+            "id": reviewList.length,
+            "reviewer": "seeduser1",
+            "review_date": review.driverDate.toISOString().split('T')[0],
+            "rating": review.driverRating,
+            "review_text": review.driverReview,
+            "user_id": 1,
+            "driver_id": 3
+        }
+        setReviewList([newReview, ...reviewList]);
     }
 
     const [activeTab, setActiveTab] = useState('1');
@@ -218,7 +236,13 @@ const DriverProfile = (props) => {
                             {!props.isLoggedIn &&
                                 <ButtonGroup className="mr-5">
                                     <Button color="primary" onClick={select} className="custom-btn"><FontAwesomeIcon icon={driverSelectIcon} /> Select as Driver</Button>
-                                    <Button color="primary" className=""><FontAwesomeIcon icon={faPencilAlt} /></Button>
+                                    <DriverReviewModal 
+                                        buttonLabel={<FontAwesomeIcon icon={faPencilAlt} />} 
+                                        reviewData=""
+                                        newReview={true}
+                                        addNewReview={addNewReview}>
+                                    </DriverReviewModal>
+                                    {/* <Button color="primary" className=""><FontAwesomeIcon icon={faPencilAlt} /></Button> */}
                                 </ButtonGroup>
                             }
                         </div>
@@ -245,7 +269,7 @@ const DriverProfile = (props) => {
                                     <Row><Col><h4 className="mt-4 mb-4">Reviews</h4></Col></Row>
                                     <Row>
                                         {
-                                            fakeReviews.map(review => {
+                                            reviewList.map(review => {
                                                 return (
                                                     <ReviewBlock className="m-2 d-flex flex-column align-items-stretch" key={review.id}>
                                                         <div className="d-flex justify-content-between align-self-stretch">
