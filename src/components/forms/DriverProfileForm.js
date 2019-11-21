@@ -20,33 +20,22 @@ const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profile
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        updateDriverProfile(status)
-        status && setFormData(status)
-    }, [status])
-
-    function clickHandlerDelete(e) {
-        e.preventDefault();
-        console.log("Delete button in DriverRegister clicked")
-    }
-
-    function clickHandlerLogout(e) {
-        e.preventDefault();
-        console.log("Logout button in DriverRegister clicked")
-    }
+        status && setFormData(status);
+        status && updateDriverProfile(status);
+    }, [status]);
 
     const showMeTheButtons = (isLoggedIn) => {
         if (isLoggedIn) {
             return (
                 <ButtonGroup className="d-flex">
                     <Button type="submit" color="primary">Update</Button>
-                    <button type="reset" className="btn btn-danger" onClick={clickHandlerDelete}>Delete</button>
+                    <Link to="/Login" className="btn btn-danger">Delete Account</Link>
                 </ButtonGroup>
             )
         }else{
             return (
                 <>
                     <Button type="submit" color="primary" block>Sign Up</Button>
-                    {/* <button type="submit" className="btn btn-primary">Submit</button> */}
                 </>
             )
         }
@@ -135,8 +124,6 @@ const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profile
     )
 }
 
-// { id, drivers_name, drivers_plot, drivers_phone_number, drivers_email, drivers_price, password, }
-
 const FormikDriverForm = withFormik({
     mapPropsToValues({profileData}) {
       return {
@@ -149,35 +136,26 @@ const FormikDriverForm = withFormik({
       };
     },
   
-    validationSchema: Yup.object().shape({
-      name: Yup.string().required("Please input a name"),
-      plot: Yup.string().required("Please input a plot location"),
-      phoneNo: Yup.number().required("Please input a phone number").typeError("Please input only digits not other chars")
-        .min(111,"Please input a 3 digit phone number").max(999,"Please input a 3 digit phone number").integer("Please input only integers"),
-      email: Yup.string().required("Please input an email address").email("Please enter a valid email"),
-      price: Yup.number().required("Please input a price").typeError("Please input only digits not other chars")
-        .integer("Please input only integers"),
-      password: Yup.string().required("Please input a password").min(3,"Min of 3 chars for the password"),
-      password2: Yup.string().required().test('passwords-match', 'Passwords must match ya fool', function(value) {
-        if(this.parent.password === value){
-            //change icon on password2
-            return this.parent.password === value;
-        }        
-        })
-    }),
-    
-    handleSubmit(values, { setStatus, resetForm }) {
-  
-      resetForm();
-      setStatus(values);
-  
-      //I don't need the if statements here, as it seems Formik will not execute handleSubmit until
-      //touched is true and there are no errors
-      
-  
-    },
-    
-    
+    // validationSchema: Yup.object().shape({
+    //   name: Yup.string().required("Please input a name"),
+    //   plot: Yup.string().required("Please input a plot location"),
+    //   phoneNo: Yup.number().required("Please input a phone number").typeError("Please input only digits not other chars")
+    //     .min(111,"Please input a 3 digit phone number").max(999,"Please input a 3 digit phone number").integer("Please input only integers"),
+    //   email: Yup.string().required("Please input an email address").email("Please enter a valid email"),
+    //   price: Yup.number().required("Please input a price").typeError("Please input only digits not other chars")
+    //     .integer("Please input only integers"),
+    //   password: Yup.string().required("Please input a password").min(3,"Min of 3 chars for the password"),
+    //   password2: Yup.string().required().test('passwords-match', 'Passwords must match ya fool', function(value) {
+    //     if(this.parent.password === value){
+    //         //change icon on password2
+    //         return this.parent.password === value;
+    //     }        
+    //     })
+    // }),
+    handleSubmit(values, {setStatus, resetForm }) {
+        setStatus(values);
+        resetForm();
+    }
   })(DriverProfileForm);
 
 export default FormikDriverForm;

@@ -9,14 +9,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
 
 const ReviewForm = (props) => {
-    const {values, errors, touched, status, setFieldValue, updateReview} = props;
+    const {values, errors, touched, status, setFieldValue, updateReview, addNewReview, newReview} = props;
     const [driverDate, setDriverDate] = useState(new Date());
     const [driverRating, setDriverRating] = useState(values.driverRating);
     const [formData, setFormData] = useState([]);
+    const [isNewReview, setIsNewReview] = useState(newReview)
 
     useEffect(() => {
         status && setFormData(status)
-        updateReview(status)
+
+        if(status && isNewReview){
+            addNewReview(status)    
+        }else if(status && !isNewReview){
+            updateReview(status)
+        }
+        
     }, [status])
 
     function changeDate(today) {
@@ -52,14 +59,26 @@ const ReviewForm = (props) => {
 }
 
 const DriverReviewForm = withFormik({
-    mapPropsToValues: ({reviewData}) => {
-        return {
-            reviewId: reviewData.id || "",
-            driverDate: reviewData.review_date || "",
-            driverRating: reviewData.rating || 3,
-            driverReview: reviewData.review_text || "",
-            userId: reviewData.user_id || "",
-            driverId: reviewData.driver_id || ""
+    mapPropsToValues: ({reviewData, newReview}) => {
+        if(newReview){
+            return {
+                reviewId: 0,
+                driverDate: "",
+                driverRating: 0,
+                driverReview: "",
+                userId: "",
+                driverId: ""    
+            }
+        }else{{
+            return {
+                    reviewId: reviewData.id || "",
+                    driverDate: reviewData.review_date || "",
+                    driverRating: reviewData.rating || 3,
+                    driverReview: reviewData.review_text || "",
+                    userId: reviewData.user_id || "",
+                    driverId: reviewData.driver_id || ""
+                }
+            }
         }
     },
     validationSchema: Yup.object().shape({

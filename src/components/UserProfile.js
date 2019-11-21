@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {Container, Row, Col, Button, ListGroup, ListGroupItem, Table, ButtonGroup, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPencilAlt, faMapMarkerAlt, faEnvelope, faMobile, faSearch, faExclamationTriangle, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -87,8 +88,6 @@ const fakeReviews = [
     }
 ]
 
-
-
 toast.configure({
     autoClose: 3000,
     draggable: false,
@@ -98,12 +97,27 @@ toast.configure({
 
 const UserProfile = (props) => {
     const [reviewList, setReviewList] = useState(fakeReviews);
+    const [driversList, setDriversList] = useState([])
     const [myDriver, setMyDriver] = useState({});
+
+    useEffect(() => {
+        axios.get('https://swapi.co/api/people')
+            .then(res => setDriversList(res.data.results))
+            .catch(err => console.log(`Error: ${err}`))
+    },[])
 
     const notify = () => {
         toast.success('Your driver has been notified!',{
             position: toast.POSITION.TOP_RIGHT
         });
+    }
+
+    function selectMyDriver(driver) {
+        let driverName = driversList[driver].name;
+        toast.info(`${driverName} has been selected as your preferred driver.`,{
+            position: toast.POSITION.TOP_RIGHT
+        });
+        setMyDriver(driversList[driver]);
     }
 
     function RemoveReview(index) {
@@ -113,15 +127,42 @@ const UserProfile = (props) => {
             }
         });
         
+        toast.success('You have deleted a review.',{
+            position: toast.POSITION.TOP_RIGHT
+        });
+
         setReviewList(newList);
     }
 
     function updateReviewList(change){
-        console.log('change', change)
-        //console.log(reviewList[change.reviewId].review_text)
-        // reviewList[change.reviewId].review_text = change.driverReview;
-        // reviewList[change.reviewId].rating = change.driverRating;
-        // reviewList[change.reviewId].review_date = change.driverDate;
+        const updateReview = {
+            "id": change.reviewId,
+            "reviewer": "seeduser1",
+            "review_date": change.driverDate,
+            "rating": change.driverRating,
+            "review_text": change.driverReview,
+            "user_id": change.userId,
+            "driver_id": change.driverId
+        }
+        
+        let curPos = reviewList.findIndex(rev => {return rev.id === change.reviewId});
+        reviewList.splice(curPos, 1, updateReview);
+        setReviewList([...reviewList])
+        
+    }
+
+    function addNewReview(review){
+        // Adds a new review for a driver
+        const newReview = {
+            "id": reviewList.length,
+            "reviewer": "seeduser1",
+            "review_date": review.driverDate.toISOString().split('T')[0],
+            "rating": review.driverRating,
+            "review_text": review.driverReview,
+            "user_id": 1,
+            "driver_id": 3
+        }
+        setReviewList([...reviewList, newReview]);
     }
 
     return (
@@ -153,15 +194,22 @@ const UserProfile = (props) => {
                             <h4 className="mt-0 mb-0">{fakeUser.users_name}</h4>
                             <p className="small mb-4"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {fakeUser.users_plot}</p>
                         </div>
-                        <div className="mt-5">
-                            
+                        <div className="mt-4">
+                            <div className="mb-1 text-white">{myDriver.name}</div>
                             <Button color="primary" onClick={notify} className="mr-5 custom-btn"><FontAwesomeIcon icon={faExclamationTriangle} /> Hail Your Driver</Button>
                         </div>
                     </Row>
                     
                     <Row className="mt-4">
                         <div className="d-flex justify-content-between" style={{width: '100%'}}>
-                            <ModalDriverList buttonLabel={<FontAwesomeIcon icon={faSearch} />} className="modal-lg" buttonColor="primary"></ModalDriverList>
+                            <ModalDriverList 
+                                buttonLabel={<FontAwesomeIcon icon={faSearch} />} 
+                                className="modal-lg" 
+                                buttonColor="primary" 
+                                driversList={driversList} 
+                                selectMyDriver={selectMyDriver}
+                                addNewReview={addNewReview}>
+                            </ModalDriverList>
                         </div>
                     </Row>
 
@@ -188,7 +236,12 @@ const UserProfile = (props) => {
                                                 <td>{review.review_text}</td>
                                                 <td>
                                                     <ButtonGroup size="sm">
-                                                        <ModalForm buttonLabel={<FontAwesomeIcon icon={faPencilAlt} />} myReview={fakeReviews[index]} updateReviewList={updateReviewList}></ModalForm>
+                                                        <ModalForm
+                                                            buttonLabel={<FontAwesomeIcon icon={faPencilAlt} />} 
+                                                            myReview={reviewList[index]} 
+                                                            updateReviewList={updateReviewList}
+                                                            newReview={false}>
+                                                        </ModalForm>
                                                         <Button color="danger" onClick={() => RemoveReview(index)}><FontAwesomeIcon icon={faTrash} /></Button>
                                                     </ButtonGroup>
                                                 </td>

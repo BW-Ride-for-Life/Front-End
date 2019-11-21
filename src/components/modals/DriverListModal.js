@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
-import {Table, Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap';
+import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+import {Table, Modal, ModalHeader, ModalBody, ModalFooter, ButtonGroup, Button} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faEye, faCheckSquare, faSquare, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+
+import DriverReviewModalForm from '../modals/DriverReviewModal'
 
 const FakeDrivers = [
     {
@@ -35,9 +39,14 @@ const FakeDrivers = [
 ]
 
 const ModalDriverList = (props) => {
-    const {buttonLabel, className, buttonColor} = props;
+    const {buttonLabel, className, buttonColor, driversList, selectMyDriver, addNewReview} = props;
+    const [driverList, setDriverList] = useState([]);    
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
+
+    useEffect(() => {
+        setDriverList(driversList)
+    },[])
 
     return(
         <>
@@ -62,15 +71,24 @@ const ModalDriverList = (props) => {
                         </thead>
                         <tbody>
                             {
-                                FakeDrivers.map(driver => {
+                                driversList.map((driver, index) => {
                                     return (
-                                        <tr key={driver.id}>
-                                            <td>rating</td>
-                                            <td>{driver.drivers_name}</td>
-                                            <td>{driver.drivers_plot}</td>
-                                            <td>{driver.drivers_price}</td>
+                                        <tr key={index}>
+                                            <td>{driver.name}</td>
+                                            <td>{driver.height}</td>
+                                            <td>{driver.mass}</td>
+                                            <td>{driver.hair_color}</td>
                                             <td>
-                                                <Button color="primary" ><FontAwesomeIcon icon={faCheckSquare} /></Button>
+                                                <ButtonGroup size="sm">
+                                                    <Link to={`/Driver/${index}`} className="btn btn-info"><FontAwesomeIcon icon={faEye} /></Link>
+                                                    <Button color="success" ><FontAwesomeIcon icon={faCheckSquare} onClick={() => (selectMyDriver(index))} /></Button>
+                                                    <DriverReviewModalForm 
+                                                        buttonLabel={<FontAwesomeIcon icon={faPencilAlt} />} 
+                                                        reviewData=""
+                                                        newReview={true}
+                                                        addNewReview={addNewReview}>
+                                                    </DriverReviewModalForm>
+                                                </ButtonGroup>
                                             </td>
                                         </tr>
                                     )

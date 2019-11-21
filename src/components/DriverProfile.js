@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
+
 import {Container, Row, Col, Button, ListGroup, ListGroupItem, Table, ButtonGroup, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import classnames from 'classnames';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPencilAlt, faMapMarkerAlt, faEnvelope, faMobile, faSearch, faExclamationTriangle, faCalendar, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faCommentAlt, faUser, faCheckSquare, faSquare, faPencil, faTrash, faPencilAlt, faMapMarkerAlt, faEnvelope, faMobile, faSearch, faExclamationTriangle, faCalendar, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
@@ -114,11 +116,48 @@ toast.configure({
 });
 
 const DriverProfile = (props) => {
-    const [driverProfile, setDriverProfile] = useState({});
-    const [activeTab, setActiveTab] = useState('1');
+    const [driverProfile, setDriverProfile] = useState(fakeUser);
+    
+    function updateDriverProfile(newProfile) {
+
+        axios.post('https://reqres.in/api/users', newProfile)
+            .then(res => {
+                // setDriverProfile(res.data)
+                const updateProfile = {
+                    "id": 4,
+                    "drivers_name": res.data.name,
+                    "drivers_plot": res.data.plot,
+                    "drivers_phone_number": res.data.phoneNo,
+                    "drivers_email": res.data.email,
+                    "password": "$2a$11$mxRYg747sGwIGz1/TR4ocuTA7Y1okuzqp/g3sWKlDXZrpqAr/oajG",
+                    "drivers_price": res.data.price,
+                    "role": "driver"
+                }
+                setDriverProfile(updateProfile)
+            })
+            .catch(err => console.log(`Error: ${err.response}`));
+    }
+
+    const [activeTab, setActiveTab] = useState('2');
+    const [driverSelectIcon, setDriverSelectIcon] = useState(faSquare);
 
     const toggle = tab => {
         if(activeTab !== tab) setActiveTab(tab);
+    }
+
+    const select = () => {
+        
+        setDriverSelectIcon((driverSelectIcon === faCheckSquare) ? faSquare : faCheckSquare);
+        if(driverSelectIcon === faCheckSquare){
+            toast.error('Driver unselected. Looking for a better one?', {
+                posittion: toast.POSITION.TOP_RIGHT
+            })
+        }else{
+            toast.success('Selected as your preferred driver', {
+                posittion: toast.POSITION.TOP_RIGHT
+            })
+        }
+        
     }
 
     const notify = () => {
@@ -127,29 +166,25 @@ const DriverProfile = (props) => {
         });
     }
 
-    function updateDriverProfile(newProfile) {
-        console.log(newProfile)
-    }
-
     return (
-        <Container className="mt-4 driver-bg-container">
+        <Container className="mt-4 driver-bg-container driverContainer">
             <Row className="">
                 <Col xs="12" sm="4">
                     {/* Profile Pic */}
                     {/* <div className="profile-header"> */}
                         <div className="profile mt-5 p-5">
-                            <img src="https://images.unsplash.com/photo-1520974735194-9e0ce82759fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="" className="rounded mb-2 img-thumbnail" />
+                            <img src="https://images.unsplash.com/photo-1525340520934-bdf4d323f830?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=80" alt="" className="rounded mb-2 img-thumbnail" style={{backgroundColor: '#F28907', borderColor: '#F2CB07'}} />
                             {/* <a href="#" className="btn btn-info btn-sm btn-block">Edit profile</a> */}
                         </div>
                     {/* </div> */}
 
                      {/* User Data Below */}
                      <ListGroup flush className="mt-3">
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faEnvelope} className="mr-2" /> {fakeUser.drivers_email}</ListGroupItem>
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMobile} className="mr-2" /> {fakeUser.drivers_phone_number}</ListGroupItem>
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {fakeUser.drivers_plot}</ListGroupItem>
-                        {fakeUser.drivers_price &&
-                            <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMoneyBill} className="mr-2" /> {fakeUser.drivers_price}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faEnvelope} className="mr-2" /> {driverProfile.drivers_email}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMobile} className="mr-2" /> {driverProfile.drivers_phone_number}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {driverProfile.drivers_plot}</ListGroupItem>
+                        {driverProfile.drivers_price &&
+                            <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMoneyBill} className="mr-2" /> {driverProfile.drivers_price}</ListGroupItem>
                         }
                     </ListGroup>
                 </Col>
@@ -157,12 +192,16 @@ const DriverProfile = (props) => {
                 <Col xs="12" sm="8">
                     <Row className="d-flex justify-content-between" style={{marginTop: "8.75rem"}}>
                         <div className="text-white mt-5">
-                            <h4 className="mt-0 mb-0">{fakeUser.drivers_name}</h4>
-                            <p className="small mb-4"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {fakeUser.drivers_plot}</p>
+                            <h4 className="mt-0 mb-0">{driverProfile.drivers_name}</h4>
+                            <p className="small mb-4"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {driverProfile.drivers_plot}</p>
                         </div>
                         <div className="mt-5">
-                            
-                            {/* <Button color="primary" onClick={notify} className="mr-5 custom-btn"><FontAwesomeIcon icon={faExclamationTriangle} /> Hail Your Driver</Button> */}
+                            {!props.isLoggedIn &&
+                                <ButtonGroup className="mr-5">
+                                    <Button color="primary" onClick={select} className="custom-btn"><FontAwesomeIcon icon={driverSelectIcon} /> Select as Driver</Button>
+                                    <Button color="success" className=""><FontAwesomeIcon icon={faPencilAlt} /></Button>
+                                </ButtonGroup>
+                            }
                         </div>
                     </Row>
                     
@@ -174,10 +213,13 @@ const DriverProfile = (props) => {
 
                     <Row className="mt-4">
                         <Col>
-                            <Nav tabs>
-                                <NavItem><NavLink className={classnames({active: activeTab === '1'})} onClick={() => {toggle('1')}}>Reviews</NavLink></NavItem>
-                                <NavItem><NavLink className={classnames({active: activeTab === '2'})} onClick={() => {toggle('2')}}>Profile</NavLink></NavItem>
-                            </Nav>
+                            { props.isLoggedIn && 
+                                <Nav tabs>
+                                    <NavItem><NavLink className={classnames({active: activeTab === '1'})} onClick={() => {toggle('1')}}><FontAwesomeIcon icon={faCommentAlt} style={{color: '#F28907'}} /> Reviews</NavLink></NavItem>
+                                    <NavItem><NavLink className={classnames({active: activeTab === '2'})} onClick={() => {toggle('2')}}><FontAwesomeIcon icon={faUser} style={{color: '#F28907'}} /> Profile</NavLink></NavItem>
+                                </Nav>
+                            }
+                            
                             <TabContent activeTab={activeTab}>
                                 {/* Review Quote boxes */}    
                                 <TabPane tabId="1">
@@ -203,8 +245,8 @@ const DriverProfile = (props) => {
                                 {/* Profile form */}
                                 <TabPane tabId="2">
                                     <Row>
-                                        <Col sm={{size: 10, offset: 1}}>
-                                            <DriverPofileForm profileData={fakeUser} updateDriverProfile={updateDriverProfile} isLoggedIn={true} />
+                                        <Col sm={{size: 8, offset: 1}}>
+                                            <DriverPofileForm profileData={driverProfile} updateDriverProfile={updateDriverProfile} isLoggedIn={true} />
                                         </Col>
                                     </Row>
                                 </TabPane>

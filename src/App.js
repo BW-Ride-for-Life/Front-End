@@ -20,7 +20,8 @@ function App() {
       <Route path="/NewDriver" render={props => <LoginPage {...props} formToDisplay="newDriver" />} />
       
       {/* Profile Routes */}
-      <Route path="/Driver" component={DriverProfile} />
+      <Route exact path="/Driver" render={props => <DriverProfile {...props} isLoggedIn={true} />} />
+      <Route path="/Driver/:id" render={props => <DriverProfile {...props} isLoggedIn={false} />} />
       <Route path="/Profile" component={UserProfile} />
 
       <Footer />
