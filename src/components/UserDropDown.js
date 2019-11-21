@@ -43,8 +43,8 @@ export default function UserDropDown({fieldName,touched,errors}) {
 
         <StyledField component="select" name={fieldName}>
           <option>Choose User Type</option>
-          <option value="Mom">Mom</option>
-          <option value="Driver">Driver</option>
+          <option value="mom">Mom</option>
+          <option value="driver">Driver</option>
         </StyledField>
 
 
