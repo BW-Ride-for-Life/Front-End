@@ -116,8 +116,27 @@ toast.configure({
 });
 
 const DriverProfile = (props) => {
-    const [driverProfile, setDriverProfile] = useState(fakeUser);
-    
+    //console.dir(props.driver)
+    const [newDriver, setNewDriver] = useState(props.driver);
+    const [driverProfile, setDriverProfile] = useState({});
+    //const [driverProfile, setDriverProfile] = useState({fakeUser});
+
+    useEffect(() => {
+        const newDriverProfile = {
+            "id": 4,
+            "drivers_name": props.driver.name,
+            "drivers_plot": props.driver.height,
+            "drivers_phone_number": props.driver.mass,
+            "drivers_email": props.driver.skin_color,
+            "password": "$2a$11$mxRYg747sGwIGz1/TR4ocuTA7Y1okuzqp/g3sWKlDXZrpqAr/oajG",
+            "drivers_price": props.driver.mass,
+            "role": "driver"
+        }
+        setDriverProfile(newDriverProfile)
+    }, [props])
+
+    console.log(driverProfile)
+
     function updateDriverProfile(newProfile) {
 
         axios.post('https://reqres.in/api/users', newProfile)
@@ -199,7 +218,7 @@ const DriverProfile = (props) => {
                             {!props.isLoggedIn &&
                                 <ButtonGroup className="mr-5">
                                     <Button color="primary" onClick={select} className="custom-btn"><FontAwesomeIcon icon={driverSelectIcon} /> Select as Driver</Button>
-                                    <Button color="success" className=""><FontAwesomeIcon icon={faPencilAlt} /></Button>
+                                    <Button color="primary" className=""><FontAwesomeIcon icon={faPencilAlt} /></Button>
                                 </ButtonGroup>
                             }
                         </div>

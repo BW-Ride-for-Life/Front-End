@@ -97,14 +97,12 @@ toast.configure({
 
 const UserProfile = (props) => {
     const [reviewList, setReviewList] = useState(fakeReviews);
-    const [driversList, setDriversList] = useState([])
+    const [driversList, setDriversList] = useState([]);
     const [myDriver, setMyDriver] = useState({});
 
     useEffect(() => {
-        axios.get('https://swapi.co/api/people')
-            .then(res => setDriversList(res.data.results))
-            .catch(err => console.log(`Error: ${err}`))
-    },[])
+        setDriversList(props.driverList)
+    }, [props])
 
     const notify = () => {
         toast.success('Your driver has been notified!',{
@@ -172,18 +170,18 @@ const UserProfile = (props) => {
                     {/* Profile Pic */}
                     {/* <div className="profile-header"> */}
                         <div className="profile mt-5 p-5">
-                            <img src="https://images.unsplash.com/photo-1520974735194-9e0ce82759fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="" className="rounded mb-2 img-thumbnail" />
+                            <img src="https://images.unsplash.com/photo-1520974735194-9e0ce82759fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="" className="rounded mb-2 img-thumbnail" style={{backgroundColor: '#A68B05', borderColor: '#F2CB07'}} />
                             {/* <a href="#" className="btn btn-info btn-sm btn-block">Edit profile</a> */}
                         </div>
                     {/* </div> */}
 
                      {/* User Data Below */}
                      <ListGroup flush className="mt-3">
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faEnvelope} className="mr-2" /> {fakeUser.users_email}</ListGroupItem>
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMobile} className="mr-2" /> {fakeUser.users_phone_number}</ListGroupItem>
-                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" /> Plot {fakeUser.users_plot}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faEnvelope} className="mr-2" style={{color: 'rgb(242,137,7)'}} /> {fakeUser.users_email}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMobile} className="mr-2" style={{color: 'rgb(242,137,7)'}} /> {fakeUser.users_phone_number}</ListGroupItem>
+                        <ListGroupItem className="p-2"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" style={{color: 'rgb(242,137,7)'}} /> Plot {fakeUser.users_plot}</ListGroupItem>
                         {fakeUser.due_date &&
-                            <ListGroupItem className="p-2"><FontAwesomeIcon icon={faCalendar} className="mr-2" /> {fakeUser.due_date}</ListGroupItem>
+                            <ListGroupItem className="p-2"><FontAwesomeIcon icon={faCalendar} className="mr-2" style={{color: 'rgb(242,137,7)'}} /> {fakeUser.due_date}</ListGroupItem>
                         }
                     </ListGroup>
                 </Col>
@@ -207,6 +205,7 @@ const UserProfile = (props) => {
                                 className="modal-lg" 
                                 buttonColor="primary" 
                                 driversList={driversList} 
+                                starWarsList={driversList}
                                 selectMyDriver={selectMyDriver}
                                 addNewReview={addNewReview}>
                             </ModalDriverList>
@@ -253,20 +252,6 @@ const UserProfile = (props) => {
                         </Table>
                     </Row>
                 </Col>
-            </Row>
-            <Row>
-                <Col xs="12" md="4">
-                   
-                </Col>
-
-                <Col xs="12" sm="6" md="8">
-                    
-                </Col>
-                <Row>
-                    <Col>
-                        
-                    </Col>
-                </Row>
             </Row>
         </Container>
     )

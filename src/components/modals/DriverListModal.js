@@ -44,9 +44,9 @@ const ModalDriverList = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
-    useEffect(() => {
-        setDriverList(driversList)
-    },[])
+    // useEffect(() => {
+    //     setDriverList(driversList)
+    // },[])
 
     return(
         <>
@@ -57,7 +57,8 @@ const ModalDriverList = (props) => {
                     <Table size="sm" hover>
                         <thead>
                             <tr>
-                                <th colSpan="5">
+                                <th colSpan="3">&nbsp;</th>
+                                <th colSpan="2">
                                     <input type="text" className="form-control" name="search" id="search" placeholder="Search" />
                                 </th>
                             </tr>
