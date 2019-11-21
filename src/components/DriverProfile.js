@@ -19,6 +19,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import DriverPofileForm from './forms/DriverProfileForm'
 
+const ReviewBlock = styled.div`
+    color: #fff;
+    background-color: #A68B05;
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-size: .9rem;
+    width: 30%;
+    padding: .5rem;
+`
+
 const fakeUser = {
     "id": 4,
     "drivers_name": "Example Driver",
@@ -29,16 +39,6 @@ const fakeUser = {
     "drivers_price": 50,
     "role": "driver"
 }
-
-const ReviewBlock = styled.div`
-    color: #fff;
-    background-color: #A68B05;
-    border: 1px solid gray;
-    border-radius: 4px;
-    font-size: .9rem;
-    width: 30%;
-    padding: .5rem;
-`
 
 const fakeReviews = [
     {
@@ -125,12 +125,12 @@ const DriverProfile = (props) => {
                 // setDriverProfile(res.data)
                 const updateProfile = {
                     "id": 4,
-                    "drivers_name": res.data.name,
-                    "drivers_plot": res.data.plot,
-                    "drivers_phone_number": res.data.phoneNo,
-                    "drivers_email": res.data.email,
+                    "drivers_name": res.data.drivers_name,
+                    "drivers_plot": res.data.drivers_plot,
+                    "drivers_phone_number": res.data.drivers_phone_number,
+                    "drivers_email": res.data.drivers_email,
                     "password": "$2a$11$mxRYg747sGwIGz1/TR4ocuTA7Y1okuzqp/g3sWKlDXZrpqAr/oajG",
-                    "drivers_price": res.data.price,
+                    "drivers_price": res.data.drivers_price,
                     "role": "driver"
                 }
                 setDriverProfile(updateProfile)
@@ -138,7 +138,7 @@ const DriverProfile = (props) => {
             .catch(err => console.log(`Error: ${err.response}`));
     }
 
-    const [activeTab, setActiveTab] = useState('2');
+    const [activeTab, setActiveTab] = useState('1');
     const [driverSelectIcon, setDriverSelectIcon] = useState(faSquare);
 
     const toggle = tab => {

@@ -17,7 +17,7 @@ const OptionContainer = styled.div`
 `
 
 const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profileData, updateDriverProfile}) => {
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState(profileData);
 
     useEffect(() => {
         status && setFormData(status);
@@ -52,40 +52,40 @@ const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profile
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText><FontAwesomeIcon icon={faUser} /></InputGroupText>
                     </InputGroupAddon>
-                    <Field name="name" id="drivers_name" placeholder="Name" className="form-control" />
-                    {touched.name && errors.name ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.name}</small>) : null}
+                    <Field name="drivers_name" id="drivers_name" placeholder="Name" className="form-control" />
+                    {touched.drivers_name && errors.drivers_name ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.drivers_name}</small>) : null}
                 </InputGroup>
                 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText><FontAwesomeIcon icon={faMobile} /></InputGroupText>
                     </InputGroupAddon>
-                    <Field name="phoneNo" id="drivers_phone_number" placeholder="Phone Number" className="form-control" />
-                    {touched.phoneNo && errors.phoneNo ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.phoneNo}</small>) : null}
+                    <Field name="drivers_phone_number" id="drivers_phone_number" placeholder="Phone Number" className="form-control" />
+                    {touched.drivers_phone_number && errors.drivers_phone_number ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.drivers_phone_number}</small>) : null}
                 </InputGroup>
                 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText><FontAwesomeIcon icon={faEnvelope} /></InputGroupText>
                     </InputGroupAddon>
-                    <Field name="email" id="email" placeholder="Email Address" className="form-control" />
-                    {touched.email && errors.email ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.email}</small>) : null}
+                    <Field name="drivers_email" id="drivers_email" placeholder="Email Address" className="form-control" />
+                    {touched.drivers_email && errors.drivers_email ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.drivers_email}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText><FontAwesomeIcon icon={faMapMarkedAlt} /></InputGroupText>
                     </InputGroupAddon>
-                    <Field name="plot" id="drivers_plot" placeholder="Address" className="form-control" />
-                    {touched.plot && errors.plot ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.plot}</small>) : null}
+                    <Field name="drivers_plot" id="drivers_plot" placeholder="Address" className="form-control" />
+                    {touched.drivers_plot && errors.drivers_plot ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.drivers_plot}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText><FontAwesomeIcon icon={faMoneyBill} /></InputGroupText>
                     </InputGroupAddon>
-                    <Field name="price" id="driver_price" placeholder="Price" className="form-control" />
-                    {touched.price && errors.price ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.price}</small>) : null}
+                    <Field name="drivers_price" id="drivers_price" placeholder="Price" className="form-control" />
+                    {touched.drivers_price && errors.drivers_price ? (<small style={{width: "100%"}} className="form-text text-danger">{errors.drivers_price}</small>) : null}
                 </InputGroup>
 
                 <InputGroup size="" className="mb-4">
@@ -128,11 +128,13 @@ const FormikDriverForm = withFormik({
     mapPropsToValues({profileData}) {
       return {
         id: profileData.id || "",
-        name: profileData.drivers_name || "",
-        plot: profileData.drivers_plot || "",
-        phoneNo: profileData.drivers_phone_number || "",
-        email: profileData.drivers_email || "",
-        price: profileData.drivers_price || ""
+        drivers_name: profileData.drivers_name || "",
+        drivers_plot: profileData.drivers_plot || "",
+        drivers_phone_number: profileData.drivers_phone_number || "",
+        drivers_email: profileData.drivers_email || "",
+        drivers_price: profileData.drivers_price || "",
+        password: profileData.password || ""
+
       };
     },
   
@@ -154,7 +156,7 @@ const FormikDriverForm = withFormik({
     // }),
     handleSubmit(values, {setStatus, resetForm }) {
         setStatus(values);
-        resetForm();
+        //resetForm();
     }
   })(DriverProfileForm);
 

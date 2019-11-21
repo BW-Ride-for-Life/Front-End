@@ -15,6 +15,8 @@ function App() {
     <div className="App">
       <HeaderNav />
 
+      <Route exact path="/" render={props => <LoginPage {...props} formToDisplay="default" />} />
+
       <Route path="/Login" render={props => <LoginPage {...props} formToDisplay="default" />} />
       <Route path="/NewMother" render={props => <LoginPage {...props} formToDisplay="newMother" />} />
       <Route path="/NewDriver" render={props => <LoginPage {...props} formToDisplay="newDriver" />} />
