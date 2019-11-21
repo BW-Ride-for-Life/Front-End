@@ -589,7 +589,7 @@ export function getAllReviews() {
     axiosWithAuth()
     .get(pathPrefix+pathSuffix)
     .then(res => {
-      console.log("This is data from server in getAllReviews THEN :",res.data);
+      // console.log("This is data from server in getAllReviews THEN :",res.data);
      
 
       dispatch({type:MOM_ALLREVU_SAVE,payload:res.data});

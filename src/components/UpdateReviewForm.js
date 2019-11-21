@@ -34,7 +34,7 @@ const StyledH3 = styled.h3`
 `;
 
 
-const AddReviewForm = (props) => {
+const UpdateReviewForm = (props) => {
   const {
     //Formik bindings
     errors,touched,  //status, 
@@ -47,13 +47,13 @@ const AddReviewForm = (props) => {
 
   //Saves sessionData in local state
   useEffect(() => {
-    setData(JSON.parse(sessionStorage.getItem('addRevuData')));
+    setData(JSON.parse(sessionStorage.getItem('updateRevuData')));
   }, []);
  
 
 
   return ( <>
-    <StyledH1>{`Add driver review for: ${data.drivers_name}`}</StyledH1>
+    <StyledH1>{`Update review for driver: ${data.drivers_name}`}</StyledH1>
 
 
     <FormCtrDiv>
@@ -71,7 +71,7 @@ const AddReviewForm = (props) => {
           touched={touched.revuTxt} errors={errors.revuTxt}
         />
 
-        <SubmitBtn textDisplay={"Add Review"}/>
+        <SubmitBtn textDisplay={"Update Review"}/>
 
       </Form>
         
@@ -96,11 +96,11 @@ const AddReviewForm = (props) => {
   );
     
  
- } //End of AddReviewForm function
+ } //End of UpdateReviewForm function
  
  
  
-const FormikAddReviewForm = withFormik({
+const FormikUpdateReviewForm = withFormik({
   
   mapPropsToValues({ rating, revuTxt }) {
     return {
@@ -126,31 +126,33 @@ const FormikAddReviewForm = withFormik({
     resetForm();
     setStatus(values);
 
-    let dataToSrv = JSON.parse(sessionStorage.getItem('addRevuData'));
-    sessionStorage.removeItem('addRevuData');
+    let dataToSrv = JSON.parse(sessionStorage.getItem('updateRevuData'));
+    sessionStorage.removeItem('updateRevuData');
     delete dataToSrv.drivers_name;
+    const reviewId =  dataToSrv.id;
+    delete dataToSrv.id;
+
     dataToSrv.rating = parseInt(values.rating,10);
     dataToSrv.review_text = values.revuTxt;
-    dataToSrv.reviewer = (JSON.parse(sessionStorage.getItem('momInfo'))).name;
 
 
-    console.log("The data to srv in handleSubmit in AddReviewForm is:",dataToSrv);
+    // console.log("The data to srv in handleSubmit in AddReviewForm is:",dataToSrv);
 
     axiosWithAuth()
-      .post(pathPrefix+"/api/reviews",dataToSrv)
+      .put(pathPrefix+"/api/reviews/"+reviewId,dataToSrv)
       .then(res => {
-        console.log("This is data from server in handleSubmit in AddReviewForm THEN :",res.data);
+        // console.log("This is data from server in handleSubmit in UpdateReviewForm THEN :",res.data);
         
       })
       .catch(err => {
-        console.log("This is data from server, in CATCH of handleSubmit in AddReviewForm, err:",err);
-        console.log("This is data from server, in CATCH of handleSubmit in AddReviewForm, err.response:",err.response);
+        console.log("This is data from server, in CATCH of handleSubmit in UpdateReviewForm, err:",err);
+        console.log("This is data from server, in CATCH of handleSubmit in UpdateReviewForm, err.response:",err.response);
         
       });
 
 
-    //Go back to drivers listing page
-    formikBag.props.history.push('/drvList');
+    //Go back to review listing page
+    formikBag.props.history.push('/reviewList');
 
     
 
@@ -161,8 +163,8 @@ const FormikAddReviewForm = withFormik({
   },
   
   
-})(AddReviewForm); 
+})(UpdateReviewForm); 
 
-export default FormikAddReviewForm;
+export default FormikUpdateReviewForm;
 
 

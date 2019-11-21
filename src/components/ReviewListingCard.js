@@ -25,7 +25,6 @@ const MyDivCharCrd =  styled.div`
   display:flex;
   flex-direction: column;
   justify-content: left;
-
 `;
 
 
@@ -42,7 +41,7 @@ export default function ReviewListingCard(props) {
     axiosWithAuth()
     .get(pathPrefix+pathSuffix)
     .then(res => {
-      console.log("This is data from server in useEffect in ReviewListingCard THEN :",res.data);
+      // console.log("This is data from server in useEffect in ReviewListingCard THEN :",res.data);
       
       setDrvName(res.data.drivers_name);
 
@@ -53,17 +52,28 @@ export default function ReviewListingCard(props) {
       
     });
 
-
-
-
-
   }, []);
 
 
   function updateHandler() {
-    console.log("Update button clicked in ReviewListingCard page");
-    // sessionStorage.setItem("driverCardId", id);
-    // props.history.push('/momViewDrvProf');
+    // console.log("Update button clicked in ReviewListingCard page");
+    
+    const date = new Date();
+    const month = (date.getMonth()+1)<10 ? "0"+(date.getMonth()+1) : ""+(date.getMonth()+1);
+    const day = (date.getDate()<10 ? "0"+date.getDate() : date.getDate());
+    const year = date.getFullYear();
+    const dateString = ""+year+"-"+month+"-"+day;
+    
+    let updateRevuData = {
+      drivers_name: drvName,
+      id: id,
+      reviewer: reviewer,
+      review_date: dateString,
+      user_id: user_id,
+      driver_id: driver_id,
+    }
+    sessionStorage.setItem("updateRevuData", JSON.stringify(updateRevuData));
+    props.history.push('/updateRevu');
   }
 
   function deleteHandler() {
