@@ -2,9 +2,11 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap';
 
-import LoginForm from './LoginForm';
-import NewMotherForm from './MomProfileForm';
-import NewDriverForm from './DriverProfileForm';
+import LoginForm from './forms/LoginForm';
+import NewMotherForm from './forms/MomProfileForm';
+import NewDriverForm from './forms/DriverProfileForm';
+
+// import {AnimatedSwitch} from 'react-router-transition';
 
 import styled from 'styled-components';
 
@@ -13,18 +15,27 @@ const Copyright = styled.div`
     font-size: 11px;
 `
 
-const LoginPage = () => {
+const FormList = {
+    default : LoginForm,
+    newMother: NewMotherForm,
+    newDriver: NewDriverForm
+}
 
+const LoginPage = (props) => {
+
+    const SelectedForm = FormList[props.formToDisplay];
+    
     return (
-        <Container id="loginContainer" className="shadow">
+        <Container id="loginContainer" className="mt-5 shadow">
             <Row>
                 <Col className="d-none d-sm-block"></Col>
                 <Col className="formCol" xs="12" sm="7" md="5" >
-                    <Route exact path="/Login" component={LoginForm} />
                     
-                    <Route path="/NewMother" component={NewMotherForm} />
-                    <Route path="/NewDriver" component={NewDriverForm} />
-
+                    <SelectedForm isLoggedIn={false} />
+                    
+                    {/* {LoginForm} */}
+                    {/* <Route path="/NewMother" component={NewMotherForm} />
+                    <Route path="/NewDriver" component={NewDriverForm} /> */}
                     <Copyright>Copyright &copy; Ride for Life 2019</Copyright>
                 </Col>
             </Row>

@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
-// import DatePicker from 'react-datepicker';
-// import "react-datepicker/dist/react-datepicker.css";
 import {withFormik, Field} from 'formik';
 import {Form, Datepicker} from 'react-formik-ui';
 import * as Yup from 'yup'
@@ -10,33 +8,19 @@ import {Container, Row, Col, FormGroup, InputGroup, InputGroupAddon, InputGroupT
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCalendarAlt} from '@fortawesome/free-solid-svg-icons';
 
-const isLoggedIn = false;
-
-const ReviewForm = ({values, errors, touched, status, setFieldValue}) => {
+const ReviewForm = (props) => {
+    const {values, errors, touched, status, setFieldValue, updateReview} = props;
     const [driverDate, setDriverDate] = useState(new Date());
     const [driverRating, setDriverRating] = useState(values.driverRating);
-    const [formData, setFormData] = useState({});
-
-    console.log(values)
+    const [formData, setFormData] = useState([]);
 
     useEffect(() => {
-        // api call for user data
         status && setFormData(status)
+        updateReview(status)
     }, [status])
 
     function changeDate(today) {
         setDriverDate(today)
-    }
-
-    function clickHandleDelete(e, a) {
-        e.preventDefault();
-        //a == action
-        if (a === 'delete'){
-            console.log('Delete Driver Review');
-        }else if(a === 'logout'){
-            console.log('I\m outta here!');
-        } 
-        
     }
 
     return (
@@ -56,45 +40,34 @@ const ReviewForm = ({values, errors, touched, status, setFieldValue}) => {
                     <Field component="textarea" className="form-control" name="driverReview" id="driverReview" />
                 </FormGroup>
 
-                {!isLoggedIn && (<button type="submit" className="btn btn-primary">Submit</button>)}
-
-                {(isLoggedIn && (
-                    <ButtonGroup>
-                        <Button type="submit" color="primary">Update</Button>
-                        <Button type="button" className="btn btn-danger">Delete</Button>
-                    </ButtonGroup>
-                ))}
+                <Button color="primary" type="submit">Submit</Button>
 
                 <Field type="hidden" name="driverRating" id="driverRating" />
                 <Field type="hidden" name="driverId" id="driverId" />
                 <Field type="hidden" name="userId" id="userId" />
+                <Field type="hidden" name="reviewId" id="reviewId" />
             </Form>
-            
-            <p>{`Review Date: ${formData.driverDate}`}</p>
-            <p>{`Review Rating: ${formData.driverRating}`}</p>
-            <p>{`Review Review: ${formData.driverReview}`}</p>
         </>
     )
 }
 
 const DriverReviewForm = withFormik({
-    mapPropsToValues: values => {
+    mapPropsToValues: ({reviewData}) => {
         return {
-            driverDate: values.driverDate || "",
-            driverRating: values.driverRating || 3,
-            driverReview: values.driverReview || "",
-            userId: values.userId || "",
-            driverId: values.driverId || ""
+            reviewId: reviewData.id || "",
+            driverDate: reviewData.review_date || "",
+            driverRating: reviewData.rating || 3,
+            driverReview: reviewData.review_text || "",
+            userId: reviewData.user_id || "",
+            driverId: reviewData.driver_id || ""
         }
     },
     validationSchema: Yup.object().shape({
         driverDate: Yup.date().required('Don\'t forget a date!')
-
     }),
     handleSubmit(values, {resetForm, setStatus}) {
-        console.log(values)
-        setStatus(values)
         resetForm();
+        setStatus(values);
     }
 })(ReviewForm)
 
