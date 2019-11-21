@@ -24,6 +24,7 @@ const CardDivChrList = styled.div`
 
 
 function DriverListing(props) {
+  // console.log("In DriverListing & props:",props);
   const {
     //Redux state bindings
     alldrvData,
@@ -48,14 +49,6 @@ function DriverListing(props) {
     setSearchResults(results);
   }, [searchTerm,alldrvData]);
 
-
-
-  // useEffect(() => {
-  //   const results = srvData.filter(personData =>
-  //     personData.name.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   setSearchResults(results);
-  // }, [searchTerm,srvData]);
   
   const handleChange = event => {
     setSearchTerm(event.target.value);
@@ -80,6 +73,7 @@ function DriverListing(props) {
         {searchResults.map( (elem) => 
           <DriverListingCard key={elem.id}
           data={elem}
+          history={history}
           />
         )}
       </CardDivChrList>

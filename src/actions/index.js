@@ -59,6 +59,10 @@ export const MOM_UPDT_CLR_MOM_INFO = "MOM_UPDT_CLR_MOM_INFO";
 //For drivers listing page
 export const ALLDRV_SAVE = "ALLDRV_SAVE"; 
 
+// For Mom View of Driver Information
+export const MOMVIEW_DRVPROF = "MOMVIEW_DRVPROF"; 
+export const MOMVIEW_DRVREVU = "MOMVIEW_DRVREVU"; 
+
 
 
 const delay_time = 1500;  //This is length of artificial delay time so that we can see different states
@@ -509,6 +513,58 @@ export function getAllDrivers() {
     .catch(err => {
       console.log("This is data from server, in CATCH of getAllDrivers err:",err);
       console.log("This is data from server, in CATCH of getAllDrivers err.response:",err.response);
+      
+      
+    });
+    
+
+  };
+}
+
+
+// ***************************************************
+// ***************************************************
+// For Mom View of Driver Information
+export function getMomViewDrvData() {
+  return function(dispatch) {
+    
+    //Get the driver profile
+    let pathSuffix = "/api/drivers/" + sessionStorage.getItem('driverCardId');
+    axiosWithAuth()
+    .get(pathPrefix+pathSuffix)
+    .then(res => {
+      console.log("This is data from server in getMomViewDrvData 1st THEN :",res.data);
+
+      const dataToUserInfoState = {
+        name: res.data.drivers_name,
+        plot: res.data.drivers_plot,
+        phoneNo: res.data.drivers_phone_number,
+        email: res.data.drivers_email,
+        price: res.data.drivers_price,
+      }
+
+      dispatch({type:MOMVIEW_DRVPROF,payload:dataToUserInfoState});
+    })
+    .catch(err => {
+      console.log("This is data from server, in CATCH of getDriverProfileData 1st err:",err);
+      console.log("This is data from server, in CATCH of getDriverProfileData 1st err.response:",err.response);
+      
+    });
+    
+
+    //Get the driver reviews
+    pathSuffix = "/api/drivers/" + sessionStorage.getItem('driverCardId') + "/reviews";
+    axiosWithAuth()
+    .get(pathPrefix+pathSuffix)
+    .then(res => {
+      console.log("This is data from server in getAllDrivers 2nd THEN :",res.data);
+      
+      dispatch({type:MOMVIEW_DRVREVU,payload:res.data});
+
+    })
+    .catch(err => {
+      console.log("This is data from server, in CATCH of getAllDrivers 2nd err:",err);
+      console.log("This is data from server, in CATCH of getAllDrivers 2nd err.response:",err.response);
       
       
     });

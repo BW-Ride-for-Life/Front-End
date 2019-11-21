@@ -29,6 +29,9 @@ import {
   //For drivers listing page
   ALLDRV_SAVE,
 
+  // For Mom View of Driver Information
+  MOMVIEW_DRVPROF, MOMVIEW_DRVREVU,
+
 } from '../actions';
 
 
@@ -80,6 +83,9 @@ const initialState = {
   //For drivers listing page
   alldrvData:[],
 
+  // For Mom View of Driver Information
+  momViewDrvProf:{}, 
+  momViewDrvRev:[],
 };
 
 
@@ -471,7 +477,29 @@ case ALLDRV_SAVE: {
 //************************************************ */
 
 
+/************************************************ */
+//*** Begin Mom View of Driver Information ****** */
 
+case MOMVIEW_DRVPROF: {
+  const newState = {
+    ...state,
+    momViewDrvProf:action.payload,
+  } 
+  return newState;
+}
+
+case MOMVIEW_DRVREVU: {
+  const newState = {
+    ...state,
+    momViewDrvRev:action.payload,
+  } 
+  return newState;
+}
+
+
+
+//*** End Mom View of Driver Information ********* */
+//************************************************ */
 
 
 
