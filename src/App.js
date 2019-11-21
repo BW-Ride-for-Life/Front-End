@@ -14,6 +14,7 @@ import PrivateRouteDriver from './components/PrivateRouteDriver';
 import DriverListing from './components/DriverListing';
 import MomViewDrvProfile from './components/MomViewDrvProfile';
 import ReviewListing from './components/ReviewListing';
+import AddReviewForm from './components/AddReviewForm';
 
 
 
@@ -31,6 +32,7 @@ function App(props) {
       <PrivateRouteMom path="/drvList" component={DriverListing} />
       <PrivateRouteMom path="/momViewDrvProf" component={MomViewDrvProfile} />
       <PrivateRouteMom path="/reviewList" component={ReviewListing} />
+      <PrivateRouteMom path="/addRevu" component={AddReviewForm} />
 
       <PrivateRouteDriver path="/updateDrv" component={DriverUpdate} />
       <PrivateRouteDriver path="/profDrv" component={DriverProfile} />

@@ -28,7 +28,7 @@ const MyDivCharCrd =  styled.div`
 
 
 export default function DriverListingCard(props) {
-  console.log("In DriverListingCard & props:",props);
+  // console.log("In DriverListingCard & props:",props);
   const {drivers_name,drivers_plot,drivers_price,id} = props.data;
 
   function profileHandler() {
@@ -38,9 +38,26 @@ export default function DriverListingCard(props) {
   }
 
   function addRevuHandler() {
-    console.log("Add review button clicked in Driver Listing Card");
-    // sessionStorage.setItem("driverCardId", id);
-    // props.history.push('/momViewDrvProf');
+    // console.log("Add review button clicked in Driver Listing Card");
+    const momInfoSess = sessionStorage.getItem('momInfo');
+
+    const date = new Date();
+    const month = (date.getMonth()+1)<10 ? "0"+(date.getMonth()+1) : ""+(date.getMonth()+1);
+    const day = (date.getDate()<10 ? "0"+date.getDate() : date.getDate());
+    const year = date.getFullYear();
+    const dateString = ""+year+"-"+month+"-"+day;
+    // console.log("The dateString is",dateString);
+    // console.log(typeof id);
+
+    let addRevuData = {
+      drivers_name:drivers_name,
+      reviewer: momInfoSess.name,
+      review_date: dateString,
+      user_id: parseInt(sessionStorage.getItem('id'),10),
+      driver_id: id,
+    }
+    sessionStorage.setItem("addRevuData", JSON.stringify(addRevuData));
+    props.history.push('/addRevu');
   }
 
   
