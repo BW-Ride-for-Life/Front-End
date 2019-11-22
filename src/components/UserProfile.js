@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPencilAlt, faMapMarkerAlt, faEnvelope, faMobile, faSearch, faExclamationTriangle, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
+import qs from 'querystring'
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -95,6 +97,10 @@ toast.configure({
     pauseOnHover: false
 });
 
+const twilioSID = 'ACd2ecf58534b2775e7dc1e06697c17281';
+const twilioAuthToken = '9c6a649f49105575ff3ad1a39be44f39';
+const twiliAPI = '2010-04-01';
+
 const UserProfile = (props) => {
     const [reviewList, setReviewList] = useState(fakeReviews);
     const [driversList, setDriversList] = useState([]);
@@ -105,9 +111,11 @@ const UserProfile = (props) => {
     }, [props])
 
     const notify = () => {
+        
         toast.success('Your driver has been notified!',{
             position: toast.POSITION.TOP_RIGHT
         });
+        
     }
 
     function selectMyDriver(driver) {

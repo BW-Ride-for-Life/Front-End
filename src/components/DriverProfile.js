@@ -119,7 +119,7 @@ toast.configure({
 
 const DriverProfile = (props) => {
     const [newDriver, setNewDriver] = useState(props.driver);
-    const [driverProfile, setDriverProfile] = useState((props.driver) ? props.driver : fakeUser);
+    const [driverProfile, setDriverProfile] = useState((props.driver) ? props.driver : {});
     //const [driverProfile, setDriverProfile] = useState({fakeUser});
     const [reviewList, setReviewList] = useState(fakeReviews);
 
