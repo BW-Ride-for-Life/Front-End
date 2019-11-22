@@ -97,10 +97,6 @@ toast.configure({
     pauseOnHover: false
 });
 
-const twilioSID = 'ACd2ecf58534b2775e7dc1e06697c17281';
-const twilioAuthToken = '9c6a649f49105575ff3ad1a39be44f39';
-const twiliAPI = '2010-04-01';
-
 const UserProfile = (props) => {
     const [reviewList, setReviewList] = useState(fakeReviews);
     const [driversList, setDriversList] = useState([]);

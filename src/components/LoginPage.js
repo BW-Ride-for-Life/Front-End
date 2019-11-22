@@ -33,9 +33,6 @@ const LoginPage = (props) => {
                     
                     <SelectedForm isLoggedIn={false} />
                     
-                    {/* {LoginForm} */}
-                    {/* <Route path="/NewMother" component={NewMotherForm} />
-                    <Route path="/NewDriver" component={NewDriverForm} /> */}
                     <Copyright>Copyright &copy; Ride for Life 2019</Copyright>
                 </Col>
             </Row>
