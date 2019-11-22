@@ -16,8 +16,8 @@ const OptionContainer = styled.div`
     margin-top: 6px;
 `
 
-const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profileData, updateDriverProfile}) => {
-    const [formData, setFormData] = useState(profileData);
+const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profileData, newDriver, updateDriverProfile}) => {
+    const [formData, setFormData] = useState((profileData) ? profileData : {});
 
     useEffect(() => {
         status && setFormData(status);
@@ -125,17 +125,30 @@ const DriverProfileForm = ({values, errors, touched, status, isLoggedIn, profile
 }
 
 const FormikDriverForm = withFormik({
-    mapPropsToValues({profileData}) {
-      return {
-        id: profileData.id || "",
-        drivers_name: profileData.drivers_name || "",
-        drivers_plot: profileData.drivers_plot || "",
-        drivers_phone_number: profileData.drivers_phone_number || "",
-        drivers_email: profileData.drivers_email || "",
-        drivers_price: profileData.drivers_price || "",
-        password: profileData.password || ""
-
-      };
+    mapPropsToValues({newDriver, profileData}) {
+        console.log(newDriver)
+        if(newDriver){
+            return {
+                id: "",
+                drivers_name: "",
+                drivers_plot: "",
+                drivers_phone_number: "",
+                drivers_email: "",
+                drivers_price: "",
+                password: ""
+              };
+        }else{
+            return {
+                id: profileData.id || "",
+                drivers_name: profileData.drivers_name || "",
+                drivers_plot: profileData.drivers_plot || "",
+                drivers_phone_number: profileData.drivers_phone_number || "",
+                drivers_email: profileData.drivers_email || "",
+                drivers_price: profileData.drivers_price || "",
+                password: profileData.password || ""
+        
+              };
+        }
     },
   
     // validationSchema: Yup.object().shape({

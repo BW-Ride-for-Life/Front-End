@@ -31,7 +31,7 @@ const LoginPage = (props) => {
                 <Col className="d-none d-sm-block"></Col>
                 <Col className="formCol" xs="12" sm="7" md="5" >
                     
-                    <SelectedForm isLoggedIn={false} />
+                    <SelectedForm isLoggedIn={false} newDriver={props.newDriver} />
                     
                     <Copyright>Copyright &copy; Ride for Life 2019</Copyright>
                 </Col>

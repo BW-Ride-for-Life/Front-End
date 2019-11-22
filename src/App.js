@@ -29,7 +29,7 @@ function App() {
 
         <Route path="/Login" render={props => <LoginPage {...props} formToDisplay="default" />} />
         <Route path="/NewMother" render={props => <LoginPage {...props} formToDisplay="newMother" />} />
-        <Route path="/NewDriver" render={props => <LoginPage {...props} formToDisplay="newDriver" />} />
+        <Route path="/NewDriver" render={props => <LoginPage {...props} formToDisplay="newDriver" newDriver={true} />} />
         
         {/* Profile Routes */}
         <Route exact path="/Driver" render={props => <DriverProfile {...props} isLoggedIn={true} driverList={driverList} driver={driverList[0]} />} />
