@@ -69,8 +69,8 @@ export const MOM_ALLREVU_SAVE = "MOM_ALLREVU_SAVE";
 
 export const delay_time = 1500;  //This is length of artificial delay time so that we can see different states
 
-//export const pathPrefix = "https://ride-for-life-back-end.herokuapp.com"; // for deployed site
-export const pathPrefix = "http://localhost:5014"; // for local server for debugging purposes
+export const pathPrefix = "https://ride-for-life-back-end.herokuapp.com"; // for deployed site
+//export const pathPrefix = "http://localhost:5014"; // for local server for debugging purposes
 
 
 // ***************************************************

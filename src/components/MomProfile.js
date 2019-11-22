@@ -122,7 +122,7 @@ function MomProfile(props) {
 
   <RegisDiv>
 	<p>
-		Update/Delete your driver reviews
+		View/Update/Delete your driver reviews
 		<span> 
 		<StyledLink to='/reviewList' > here</StyledLink>
 		</span>

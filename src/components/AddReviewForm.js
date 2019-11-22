@@ -27,19 +27,13 @@ const FormCtrDiv = styled.div`
   justify-content: center;
 `;
 
-const StyledH3 = styled.h3`
-  width:fit-content;
-  margin:0 auto;
-  margin-top:10px;
-`;
-
 
 const AddReviewForm = (props) => {
   const {
     //Formik bindings
     errors,touched,  //status, 
     //React router props
-    history,
+    //history,
   } = props;
 
   const [data, setData] = useState({});
