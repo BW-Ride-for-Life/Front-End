@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, withFormik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
+import {connect} from 'react-redux';
 
 import mailIcon from '../images/mail.png';
 import lockIcon from '../images/lock.png';
@@ -11,12 +12,14 @@ import TextIn from './TextIn';
 import SubmitBtn from './SubmitBtn';
 import UserDropDown from './UserDropDown';
 
+// *@* redux actions
+import {loginToServer, clear_moveLoginToLanding} from '../actions';
+
 const StyledH1 = styled.h1`
   width:fit-content;
   margin:0 auto;
   margin-top:10px;
   font-size:30px;
-  // font-family: 'Muli', sans-serif;
 `;
 
 const FormCtrDiv = styled.div`
@@ -30,7 +33,6 @@ const StyledLink = styled(Link)`
   color:blue;
   text-decoration:underline;
   font-size:16px;
-  // font-family: 'Muli', sans-serif;
 `;
 
 const RegisDiv = styled.div`
@@ -39,27 +41,76 @@ const RegisDiv = styled.div`
   justify-content: left;
 `;
 
+const StyledH3 = styled.h3`
+  width:fit-content;
+  margin:0 auto;
+  margin-top:10px;
+`;
 
+
+// Component for Login
 const Login = (props) => {
   const {
     //Formik bindings
-    errors,touched,status,
-    //Redux state bindings
+    errors,touched,  //status,
+    // *@* Redux state bindings
     loginFormState, loginErrMsg, moveLoginToLanding, notLoggedIn,
-    //Redux action bindings
-    loginToServer, clear_moveLoginToLanding,
-    //React router props
+    // *@* Redux action bindings
+    clear_moveLoginToLanding,
+    // *@* React router props
     history,
   } = props;
-  const [data, setData] = useState({});
-  
 
-  //Saves data into local state
-  useEffect(() => {
-    status && setData(status);
-  }, [status]);
+  // For debugging use only
+  // const [data, setData] = useState({});
 
+  //Saves data into local state for debugging use only
+  // useEffect(() => {
+  //   status && setData(status);
+  // }, [status]);
 
+  // *@* This moves us from login to mom/driver profile page when the login is 
+  // successful
+  useEffect(()=>{
+    if(moveLoginToLanding && (sessionStorage.getItem("tokenType")==="mom")) {
+      history.push('/profMom');
+    }
+    if(moveLoginToLanding && (sessionStorage.getItem("tokenType")==="driver")) {
+      history.push('/profDrv');
+    }
+
+    //This is to clear the sessionStorage whenever we first mount the 
+    //Login page so that we start with an empty sessionStorage
+    if(notLoggedIn) {
+      sessionStorage.clear();
+    }
+
+    //When the redux state flag moveLoginToLanding becomes true, it indicates that we 
+    //have to move from the Login page to the mom/driver landing page after
+    //login has been successfully completed. This is accomplished by the
+    //first two if statements in this useEffect. Now that the two if statements 
+    //have done their work, we need to make moveLoginToLanding false.
+    if(moveLoginToLanding) {
+      clear_moveLoginToLanding(); 
+    }
+  },[moveLoginToLanding])
+
+  // *@* This set the messages to the user to keep him
+  // aware of the state of the page
+  function formStatus(formState,errMsg="") {
+    switch(formState) {
+      case 0:
+        return "";
+      case 1:
+        return "Checking credentials on server. Please wait...";
+      case 2: 
+        return "You are logged in, please wait...";
+      case 3:
+        return errMsg;
+      default:
+        return "Unknown Error";      
+    }
+  }
 
 
   return (
@@ -81,7 +132,6 @@ const Login = (props) => {
             touched={touched.password} errors={errors.password}
           />
 
-          {/* This is for last communication method */}
           <UserDropDown  fieldName="userType" touched={touched.userType} errors={errors.userType} />
 
           <SubmitBtn textDisplay={"Login"}/>
@@ -109,15 +159,16 @@ const Login = (props) => {
         
       </FormCtrDiv>
 
+      {/* *@* This is for message of page state to user*/}
+      <StyledH3>{formStatus(loginFormState, loginErrMsg)}</StyledH3>
 
       {/* The following code is for testing purposes only */}
       {/* comment out in customer version of the code */}
       {/* <p>{`The donor ID is: ${data.donorId}`}</p> */}
-      <p>{`The email address is: ${data.email}`}</p>
+      {/* <p>{`The email address is: ${data.email}`}</p>
       <p>{`The password is: ${data.password}`}</p>
-      <p>{`The donor communication method is: ${data.userType}`}</p>
+      <p>{`The donor communication method is: ${data.userType}`}</p> */}
       
-
 
     </>
 
@@ -141,13 +192,21 @@ const FormikLogin = withFormik({
   validationSchema: Yup.object().shape({
     email: Yup.string().required("Please input donor's email address").email("Please enter a valid email"),
     password: Yup.string().required("Please input a password").min(3,"Min of 3 chars for the password"),
-    userType: Yup.string().oneOf(["Mom", "Driver"],"Please choose user type").required("Please choose user type"),
+    userType: Yup.string().oneOf(["mom", "driver"],"Please choose user type").required("Please choose user type"),
   }),
   
-  handleSubmit(values, { setStatus, resetForm }) {
+  handleSubmit(values, formikBag) {
+    // console.log("This is values",values);
+    // console.log("This is formikBag",formikBag);
+    // console.log("This is props in formikBag",formikBag.props);
 
+    const { setStatus, resetForm } = formikBag;
+    const {loginToServer} = formikBag.props;
     resetForm();
     setStatus(values);
+
+    // *@* Redux action call
+    loginToServer(values);
 
     //I don't need the if statements here, as it seems Formik will not execute handleSubmit until
     //touched is true and there are no errors
@@ -157,8 +216,19 @@ const FormikLogin = withFormik({
   
   
 })(Login); 
-  
-export default FormikLogin;
+
+function mapStateToProps(state) {
+  return {
+    loginFormState: state.loginFormState,
+    loginErrMsg: state.loginErrMsg,
+    moveLoginToLanding: state.moveLoginToLanding,
+    notLoggedIn: state.notLoggedIn,
+  };
+}
+
+export default connect(mapStateToProps,
+  {loginToServer, clear_moveLoginToLanding}
+)(FormikLogin);
 
 
 
